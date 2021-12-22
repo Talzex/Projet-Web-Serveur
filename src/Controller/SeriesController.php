@@ -13,15 +13,22 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/series')]
 class SeriesController extends AbstractController
 {
-    #[Route('/', name: 'series_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+
+    #[Route('/page/{num_page}', name: 'series_index', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager, $num_page = 1): Response
     {
+        $seriesParPage = 20;
+        $offset = 0;
+        if(!empty($num_page) && $num_page > 0){
+            $offset =  $seriesParPage*($num_page-1);
+        }
         $series = $entityManager
             ->getRepository(Series::class)
-            ->findBy([], ["title" => "ASC"], 20, 0);
+            ->findBy([], ["title" => "ASC"], $seriesParPage, $offset);
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
+            'num_page' => $num_page
         ]);
     }
 
