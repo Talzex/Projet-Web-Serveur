@@ -3,7 +3,31 @@
 {% block title %}Series index{% endblock %}
 
 {% block main %}
-    <h1>Series index</h1>
+    <h1 class="text-white text-center">Listes des séries</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 align-items-stretch justify-content-around card-deck">
+        {% for series in series %}
+        <div class="card text-white bg-dark p-0" style="width: 18rem;">
+            <img class="card-img-top" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" width="100">
+            <div class="card-body">
+                <h5 class="card-title">{{ series.title }}</h5>
+                <!-- <p class="card-text">{{ series.plot|slice(0, 200) ~ '...' }}</p> -->
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-white bg-dark">{{ series.awards }}</li>
+                <li class="list-group-item text-white bg-dark">{{ series.yearStart == '' ? '?' : series.yearStart }} - {{ series.yearEnd == '' ? '?' : series.yearEnd }}</li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="card-link">YouTube Trailer</a>
+                <a href="#" class="card-link">Plus d'informations</a>
+            </div>
+        </div>
+        {% else %}
+                <tr>
+                    <td colspan="11">no records found</td>
+                </tr>
+        {% endfor %}
+    </div>
 
     <table class="table">
         <thead>
