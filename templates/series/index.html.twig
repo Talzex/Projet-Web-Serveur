@@ -1,57 +1,65 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Series index{% endblock %}
-
+{% block title %}Series
+{% endblock %}
 {% block main %}
-    <h1 class="text-white text-center">Listes des séries</h1>
+	<h1 class="text-white text-center">Listes des séries</h1>
+	<div class="container-fluid">
+		<div class="row justify-content-between">
+			{% for series in series %}
+				<div class="col-xs-1 col-sm-6 col-md-4 col-lg-3 col-xl-auto py-3">
+					<div class="card bg-transparent text-white p-0 d-inline-flex border-0" style="width: 250px;">
+						<div class="card-body overflow-hidden text-center p-0">
+							<img class="poster" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="350px" width="250px">						</div>
+						<div class="card-footer bg-transparent text-center">
+							<h5 class="card-title m-0">{{ series.title }}</h5>
+							<p class="card-text">Note series : 8,8/10</p>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<p>Aucune série n'a été trouvée.</p>
+			{% endfor %}
+		</div>
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<li class="page-item">
+					<a class="page-link" href="{{ path('series_index')}}/{{ num_page - 1}}" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+						<span class="sr-only">Previous</span>
+					</a>
+				</li>
+				{% if num_page >= 3 %}
+					<li class="page-item">
+						<a class="page-link" href="{{ path('series_index') }}/{{ num_page - 2 }}">{{ num_page - 2 }}</a>
+					</li>
+				{% endif %}
+				{% if num_page >= 2 %}
+					<li class="page-item">
+						<a class="page-link" href="{{ path('series_index') }}/{{ num_page - 1 }}">{{ num_page - 1 }}</a>
+					</li>
+				{% endif %}
+				{% if num_page > 0 %}
+					<li class="page-item active">
+						<a class="page-link" href="{{ path('series_index') }}/{{ num_page }}">{{ num_page }}</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="{{ path('series_index') }}/{{ num_page + 1 }}">{{ num_page + 1 }}</a>
+					</li>
+					<li class="page-item">
+						<a class="page-link" href="{{ path('series_index') }}/{{ num_page + 2 }}">{{ num_page + 2 }}</a>
+					</li>
+				{% endif %}
+				<li class="page-item">
+					<a class="page-link" href="{{ path('series_index')}}/{{ num_page + 1}}" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+						<span class="sr-only">Next</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
 
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 align-items-stretch justify-content-around card-deck">
-        {% for series in series %}
-        <div class="card text-white bg-dark p-0" style="width: 18rem;">
-            <img class="card-img-top" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" width="100">
-            <div class="card-body">
-                <h5 class="card-title">{{ series.title }}</h5>
-                <!-- <p class="card-text">{{ series.plot|slice(0, 200) ~ '...' }}</p> -->
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item text-white bg-dark">{{ series.awards }}</li>
-                <li class="list-group-item text-white bg-dark">{{ series.yearStart == '' ? '?' : series.yearStart }} - {{ series.yearEnd == '' ? '?' : series.yearEnd }}</li>
-            </ul>
-            <div class="card-body d-flex flex-column">
-                <a href="#" class="card-link text-center text-white text-decoration-none">YouTube Trailer</a>
-                <a href="#" class="card-link text-center text-white text-decoration-none m-0">Plus d'informations</a>
-            </div>
-        </div>
-        {% else %}
-            <p>Aucune série n'a été trouvée.</p>
-        {% endfor %}
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                <a class="page-link" href="{{ path('series_index')}}/{{ num_page - 1}}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                </li>
-                {% if num_page >= 3 %}
-                    <li class="page-item"><a class="page-link" href="{{ path('series_index') }}/{{ num_page - 2 }}">{{ num_page - 2 }}</a></li>
-                {% endif %}
-                {% if num_page >= 2 %}
-                    <li class="page-item"><a class="page-link" href="{{ path('series_index') }}/{{ num_page - 1 }}">{{ num_page - 1 }}</a></li>
-                {% endif %}
-                {% if num_page > 0 %}
-                    <li class="page-item active"><a class="page-link" href="{{ path('series_index') }}/{{ num_page }}">{{ num_page }}</a></li>
-                    <li class="page-item"><a class="page-link" href="{{ path('series_index') }}/{{ num_page + 1 }}">{{ num_page + 1 }}</a></li>
-                    <li class="page-item"><a class="page-link" href="{{ path('series_index') }}/{{ num_page + 2 }}">{{ num_page + 2 }}</a></li>
-                {% endif %}
-                <li class="page-item">
-                <a class="page-link" href="{{ path('series_index')}}/{{ num_page + 1}}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <a href="{{ path('series_new') }}">Create new</a>
+	</div>
+
+
+	<a href="{{ path('series_new') }}">Create new</a>
 {% endblock %}

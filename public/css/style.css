@@ -1,7 +1,6 @@
 .background-body {
     background-color: #222f3e;
 }
-
 td,
 th {
     border-bottom: 1px solid #aaa;
@@ -17,4 +16,13 @@ thead th {
 tbody td {
     font-size: 24px;
     text-shadow: 1px 1px 1px black;
+}
+
+.poster{
+    transition: all .3s ease-in-out;
+}
+.poster:hover{
+    opacity: .3;
+    filter: blur(3px);
+    transform: scale(1.2);
 }
