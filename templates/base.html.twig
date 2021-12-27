@@ -55,10 +55,9 @@
 						{% endif %}
 						
 					</ul>
-					<form class="d-flex" method="get">
-						<input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Rechercher">
-						<button class="btn btn-outline-light" type="submit">Rechercher</button>
-					</form>
+						{{ render(controller(
+							'App\\Controller\\SearchController::searchBar'
+							)) }}
 				</div>
 			</div>
 		</nav>

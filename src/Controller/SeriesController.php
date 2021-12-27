@@ -6,7 +6,6 @@ use App\Entity\ExternalRating;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use App\Repository\SeriesRepository;
-use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
