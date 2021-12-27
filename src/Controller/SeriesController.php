@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\ExternalRating;
 use App\Entity\Series;
 use App\Form\SeriesType;
+use App\Repository\SeriesRepository;
+use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,21 +17,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class SeriesController extends AbstractController
 {
 
-    #[Route('/page/{num_page}', name: 'series_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager, $num_page = 1): Response
+    #[Route('/{numPage}', name: 'series_index', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager, SeriesRepository $seriesRepo, $numPage = 1): Response
     {
-        $seriesParPage = 20;
-        $offset = 0;
-        if(!empty($num_page) && $num_page > 0){
-            $offset =  $seriesParPage*($num_page-1);
-        }
-        $series = $entityManager
-            ->getRepository(Series::class)
-            ->findBy([], ["title" => "ASC"], $seriesParPage, $offset);
+        $series = $seriesRepo->getSeries($numPage, 20);
+        
+        $ratings = $entityManager
+            ->getRepository(ExternalRating::class)
+            ->findAll();
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
-            'num_page' => $num_page
+            'ratings' => $ratings,
+            'num_page' => $numPage
         ]);
     }
 
@@ -52,11 +53,16 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'series_show', methods: ['GET'])]
-    public function show(Series $series): Response
+    #[Route('/view/{id}', name: 'series_show', methods: ['GET'])]
+    public function show(EntityManagerInterface $entityManager, Series $series): Response
     {
+        $rating = $entityManager
+            ->getRepository(ExternalRating::class)
+            ->findBy(['series' => $series]);
+            
         return $this->render('series/show.html.twig', [
             'series' => $series,
+            'rating' => $rating[0]
         ]);
     }
 

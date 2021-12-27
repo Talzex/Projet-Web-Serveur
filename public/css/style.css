@@ -25,4 +25,5 @@ tbody td {
     opacity: .3;
     filter: blur(3px);
     transform: scale(1.2);
+    cursor: pointer;
 }
