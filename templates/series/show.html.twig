@@ -1,66 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Series{% endblock %}
-
+{% block title %}Series
+{% endblock %}
 {% block main %}
-    <h1>Series</h1>
+	<div class="container white mt-5">
+		<div class="row">
+			<div class="col-2 text-center">
+				<img class="rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="300px" width="200px">
+			</div>
+			<div class="col-10">
+				<div class="title">
+					<h2>{{ series.title }}</h2>
+				</div>
+				<div class="tags">
+					<span>
+						{% for genre in series.genre %}
+							{{ genre.name }}
+						{% endfor %}
+					</span>
+					<span>
+						<i class="bi bi-calendar-date yellow"></i>
+						{{ series.yearStart }}</span>
+					<span class="yellow">? Saisons</span>
+                    
+				</div>
+				<div class="plot mt-3">
+					{{series.plot}}
+				</div>
+				<ul class="d-flex flex-wrap list-unstyled mt-3">
+					<li>
+						<span class="director yellow">Directeur</span>
+						<p>{{ series.director }}</p>
+					</li>
+					<li class="ms-3">
+						<span class="actor yellow">Actor</span>
+						<p class="mt-2">
+							{% for actors in series.actor %}
+								{{ actors.name }}
+							{% endfor %}
+						</p>
+					</li>
+					<li class="ms-3">
+						<span class="awards"><i class="bi bi-award-fill yellow"></i></i></span>
+						<p class="mt-2">{{ series.awards }}</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
+            <div>
+                <a class="btn btn-outline-dark" href="{{ path("series_imdb", {"id": series.id}) }}" role="button">
+                    <p class="m-0 yellow rating fw-bold">IMDB :{{ rating.value }}</p>
+                </a>
+            </div>
+            <div>
+                <a class="btn btn-outline-light " href="{{ path("series_trailer", {"id": series.id}) }}" role="button"><i class="bi bi-youtube"> Bande Annonce</i></a>
+            </div>
+			
+		</div>
+	</div>
+	<a href="{{ path('series_index') }}">back to list</a>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ series.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ series.title }}</td>
-            </tr>
-            <tr>
-                <th>Plot</th>
-                <td>{{ series.plot }}</td>
-            </tr>
-            <tr>
-                <th>Imdb</th>
-                <td>{{ series.imdb }}</td>
-            </tr>
-            <tr>
-                <th>Poster</th>
-                <td><img src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster"></td>
-            </tr>
-            <tr>
-                <th>Director</th>
-                <td>{{ series.director }}</td>
-            </tr>
-            <tr>
-                <th>YoutubeTrailer</th>
-                <td>{{ series.youtubeTrailer }}</td>
-            </tr>
-            <tr>
-                <th>Awards</th>
-                <td>{{ series.awards }}</td>
-            </tr>
-            <tr>
-                <th>YearStart</th>
-                <td>{{ series.yearStart }}</td>
-            </tr>
-            <tr>
-                <th>YearEnd</th>
-                <td>{{ series.yearEnd }}</td>
-            </tr>
-            <tr>
-                <th>Rating</th>
-                <td>{{ rating.value }}</td>
-            </tr>
-            <tr>
-                <th>Nombres de votes</th>
-                <td>{{ rating.votes }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<a href="{{ path('series_edit', {'id': series.id}) }}">edit</a>
 
-    <a href="{{ path('series_index') }}">back to list</a>
-
-    <a href="{{ path('series_edit', {'id': series.id}) }}">edit</a>
-
-    {{ include('series/_delete_form.html.twig') }}
+	{{ include('series/_delete_form.html.twig') }}
 {% endblock %}

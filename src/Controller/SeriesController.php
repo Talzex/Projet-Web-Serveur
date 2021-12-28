@@ -64,6 +64,20 @@ class SeriesController extends AbstractController
             'rating' => $rating[0]
         ]);
     }
+    #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
+    public function trailer(Series $series): Response
+    {
+        $series_url = $series->getYoutubeTrailer();
+        return $this->redirect($series_url);
+    }
+
+    #[Route('/view/{id}/imdb', name: 'series_imdb', methods: ['GET'])]
+    public function imdb(Series $series): Response
+    {
+        $series_url = $series->getImdb();
+        return $this->redirect('https://www.imdb.com/title/'.$series_url);
+    }
+            
 
     #[Route('/{id}/edit', name: 'series_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Series $series, EntityManagerInterface $entityManager): Response
@@ -103,4 +117,6 @@ class SeriesController extends AbstractController
             'Content-Disposition' => 'inline; filename="'.$poster.'"');
         return new Response(stream_get_contents($poster, -1, 0), 200, $headers);
     }
+
+    
 }
