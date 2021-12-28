@@ -1,3 +1,10 @@
+.white{
+    color: var(--bs-white);
+}
+
+.yellow{
+    color: var(--bs-yellow);
+}
 .background-body {
     background-color: #222f3e;
 }
@@ -27,3 +34,22 @@ tbody td {
     transform: scale(1.2);
     cursor: pointer;
 }
+.rating{
+    font-size: .75rem;
+}
+.plot{
+    color: var(--bs-secondary);
+}
+
+.director + p, .actor + p, .awards + p{
+    font-size: .75rem;
+}
+
+.tags > span{
+    padding: 0.5rem;
+}
+
+.external-link{
+    background-color: #34485f;
+}
+

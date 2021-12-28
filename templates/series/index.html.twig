@@ -10,15 +10,16 @@
 					<div class="card bg-transparent text-white p-0 d-inline-flex border-0" style="width: 250px;">
 						<div class="card-body overflow-hidden text-center p-0">
 							<a href="{{ path('series_show', {'id': series.id}) }}">
-								<img class="poster" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="350px" width="250px">						</div>
+								<img class="poster rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="350px" width="250px">
 							</a>
+						</div>
 						<div class="card-footer bg-transparent text-center">
 							<h5 class="card-title m-0">{{ series.title }}</h5>
-							<p class="card-text">Note serie : 
+							<p class="card-text rating fw-bold yellow">IMDB :
 								{% for ratings in ratings %}
 									{% if ratings.series == series %}
 										{{ ratings.value }}
-								{% endif %}
+									{% endif %}
 								{% endfor %}
 							</p>
 						</div>
