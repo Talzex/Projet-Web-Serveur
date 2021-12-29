@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,12 +33,24 @@ class Season
     /**
      * @var \Series
      *
-     * @ORM\ManyToOne(targetEntity="Series")
+     * @ORM\ManyToOne(targetEntity="Series", inversedBy="seasons")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="series_id", referencedColumnName="id")
      * })
      */
     private $series;
+
+    /**
+     * @var \Episodes
+     *
+     * @ORM\OneToMany(targetEntity="Episode", mappedBy="season")
+     */
+    private $episodes;
+
+    public function __construct()
+    {
+        $this->episodes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -63,6 +77,36 @@ class Season
     public function setSeries(?Series $series): self
     {
         $this->series = $series;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Season[]
+     */
+    public function getEpisodes(): Collection
+    {
+        return $this->episodes;
+    }
+
+    public function addEpisode(Season $episode): self
+    {
+        if (!$this->episodes->contains($episode)) {
+            $this->episodes[] = $episode;
+            $episode->setSeasons($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEpisode(Season $episode): self
+    {
+        if ($this->episodes->removeElement($episode)) {
+            // set the owning side to null (unless already changed)
+            if ($episode->getSeasons() === $this) {
+                $episode->setSeasons(null);
+            }
+        }
 
         return $this;
     }

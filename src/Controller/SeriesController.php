@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\ExternalRating;
+use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use App\Repository\SeriesRepository;
@@ -118,5 +119,12 @@ class SeriesController extends AbstractController
         return new Response(stream_get_contents($poster, -1, 0), 200, $headers);
     }
 
-    
+    #[Route('/view/{serie}/{season}', name: 'show_season', methods: ['GET'])]
+    public function showSeason(Series $serie, Season $season): Response
+    {
+        return $this->renderForm('series/season.html.twig', [
+            'serie' => $serie,
+            'season' => $season,
+        ]);
+    }
 }

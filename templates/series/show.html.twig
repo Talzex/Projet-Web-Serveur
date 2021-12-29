@@ -22,7 +22,11 @@
 						<i class="bi bi-calendar-date yellow"></i>
 						{{ series.yearStart }}</span>
 					<span class="yellow">? Saisons</span>
-                    
+                    <ul>
+						{% for season in series.seasons %}
+							<li><a href="{{ path('show_season', {'serie': series.id ,'season': season.number}) }}">Saison {{ season.number }}</a> : {{ season.episodes|length }} épisodes</li>
+						{% endfor %}
+					</ul>
 				</div>
 				<div class="plot mt-3">
 					{{series.plot}}
