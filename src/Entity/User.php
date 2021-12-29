@@ -271,7 +271,8 @@ class User implements UserInterface
     }
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $role = $this->getAdmin() ? ['ROLE_ADMIN'] : ['ROLE_USER'];
+        return $role;
     }
     public function eraseCredentials()
     {
