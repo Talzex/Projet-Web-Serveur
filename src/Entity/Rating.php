@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Rating
@@ -25,6 +26,8 @@ class Rating
      * @var int
      *
      * @ORM\Column(name="value", type="integer", nullable=false)
+     * @Assert\LessThanOrEqual(value = 10, message="Votre note ne peut pas excéder {{ compared_value }}")
+     * @Assert\GreaterThanOrEqual(value = 0, message="Votre note ne peut pas être inférieur à {{ compared_value }}")
      */
     private $value;
 
@@ -45,7 +48,7 @@ class Rating
     /**
      * @var \Series
      *
-     * @ORM\ManyToOne(targetEntity="Series")
+     * @ORM\ManyToOne(targetEntity="Series", inversedBy="ratings")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="series_id", referencedColumnName="id")
      * })
@@ -91,9 +94,10 @@ class Rating
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): String
     {
-        return $this->date;
+        $date = $this->date == NULL ? "Pas de date pour cet épisode" : $this->date->format('d/m/Y H:i:s');
+        return $date;
     }
 
     public function setDate(\DateTimeInterface $date): self
