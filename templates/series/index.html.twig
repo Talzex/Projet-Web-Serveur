@@ -24,7 +24,8 @@
 				<p>Aucune série n'a été trouvée.</p>
 			{% endfor %}
 		</div>
-		<nav aria-label="Page navigation example">
+		{% if series|length > 0 %}
+		<nav aria-label="Page navigation">
 			<ul class="pagination justify-content-center">
 				<li class="page-item">
 					<a class="page-link" href="{{ path('series_index')}}/{{ num_page - 1}}" aria-label="Previous">
@@ -61,7 +62,7 @@
 				</li>
 			</ul>
 		</nav>
-
+		{% endif %}
 	</div>
 
 

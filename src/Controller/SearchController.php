@@ -39,18 +39,15 @@ class SearchController extends AbstractController
         $series = [];
         if($request){
             $request = $request->request->all();
-            $query = $request['form']['query'];
-            $series = $seriesRepo->getSeriesByName($query);
+            if($request){
+                $query = $request['form']['query'];
+                $series = $seriesRepo->getSeriesByName($query);
+            }
         }
-
-        $ratings = $entityManager
-            ->getRepository(ExternalRating::class)
-            ->findAll();
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'num_page' => 1,
-            'ratings' => $ratings
         ]);
     }
 }
