@@ -5,14 +5,17 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
  *
  * @ORM\Table(name="user", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_8D93D649E7927C74", columns={"email"})}, indexes={@ORM\Index(name="IDX_8D93D649F92F3E70", columns={"country_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -56,7 +59,7 @@ class User
      *
      * @ORM\Column(name="admin", type="boolean", nullable=false)
      */
-    private $admin = '0';
+    private $admin = false;
 
     /**
      * @var string|null
@@ -155,17 +158,19 @@ class User
         return $this;
     }
 
+
     public function getRegisterDate(): ?\DateTimeInterface
     {
         return $this->registerDate;
     }
 
-    public function setRegisterDate(String $registerDate): self
+    public function setRegisterDate(?\DateTimeInterface $registerDate): self
     {
         $this->registerDate = $registerDate;
 
         return $this;
     }
+
 
     public function getAdmin(): ?bool
     {
@@ -254,5 +259,21 @@ class User
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getSalt()
+    {
+        return '';
+    }
+    public function getUsername()
+    {
+        return $this->getEmail();
+    }
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+    public function eraseCredentials()
+    {
     }
 }

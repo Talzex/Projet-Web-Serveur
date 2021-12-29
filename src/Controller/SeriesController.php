@@ -21,6 +21,7 @@ class SeriesController extends AbstractController
     #[Route('/{numPage}', name: 'series_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, SeriesRepository $seriesRepo, $numPage = 1): Response
     {
+        $numPage = is_int($numPage) ? $numPage : 1;
         $series = $seriesRepo->getSeries($numPage, 20);
 
         return $this->render('series/index.html.twig', [
@@ -29,7 +30,7 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'series_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/new', name: 'series_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $series = new Series();
@@ -71,7 +72,7 @@ class SeriesController extends AbstractController
     }
             
 
-    #[Route('/{id}/edit', name: 'series_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/{id}/edit', name: 'series_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Series $series, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SeriesType::class, $series);
@@ -89,7 +90,7 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'series_delete', methods: ['POST'])]
+    #[Route('/admin/delete/{id}', name: 'series_delete', methods: ['POST'])]
     public function delete(Request $request, Series $series, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$series->getId(), $request->request->get('_token'))) {
