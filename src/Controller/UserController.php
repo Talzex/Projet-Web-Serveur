@@ -33,6 +33,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setUserId($user->getName()[0] . date('s') . date('i') . date('d') . $user->getName()[1]); // Génération d'un userId unique
+            $user->setRegisterDate(gmdate('d/m/Y H:i:s'));
+            $user->setAdmin(false);
+            $user->setPassword(sha1($user->getPassword()));
             $entityManager->persist($user);
             $entityManager->flush();
 

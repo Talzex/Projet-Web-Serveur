@@ -160,7 +160,7 @@ class User
         return $this->registerDate;
     }
 
-    public function setRegisterDate(?\DateTimeInterface $registerDate): self
+    public function setRegisterDate(String $registerDate): self
     {
         $this->registerDate = $registerDate;
 
