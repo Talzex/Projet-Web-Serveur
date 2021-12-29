@@ -6,7 +6,7 @@
 
 {{ serie.title }} <!-- titre de la série -->
 
-    <p>Il y a {{ season.episodes|length }} épisodes dans la saison {{ season.number }} de {{ serie.title }}</p>
+    <p>Il y a {{ season.episodes|length }} épisodes dans la saison {{ season.id }} de {{ serie.title }}</p>
     <ul>
         {% for episode in season.episodes %}
             <li>{{episode.title}}</li>
