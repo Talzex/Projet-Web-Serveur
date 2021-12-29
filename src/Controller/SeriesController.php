@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Episode;
 use App\Entity\ExternalRating;
 use App\Entity\Season;
 use App\Entity\Series;
@@ -21,14 +22,9 @@ class SeriesController extends AbstractController
     public function index(EntityManagerInterface $entityManager, SeriesRepository $seriesRepo, $numPage = 1): Response
     {
         $series = $seriesRepo->getSeries($numPage, 20);
-        
-        $ratings = $entityManager
-            ->getRepository(ExternalRating::class)
-            ->findAll();
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
-            'ratings' => $ratings,
             'num_page' => $numPage
         ]);
     }
@@ -55,14 +51,9 @@ class SeriesController extends AbstractController
 
     #[Route('/view/{id}', name: 'series_show', methods: ['GET'])]
     public function show(EntityManagerInterface $entityManager, Series $series): Response
-    {
-        $rating = $entityManager
-            ->getRepository(ExternalRating::class)
-            ->findBy(['series' => $series]);
-            
+    {            
         return $this->render('series/show.html.twig', [
             'series' => $series,
-            'rating' => $rating[0]
         ]);
     }
     #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
@@ -125,6 +116,16 @@ class SeriesController extends AbstractController
         return $this->renderForm('series/season.html.twig', [
             'serie' => $serie,
             'season' => $season,
+        ]);
+    }
+
+    #[Route('/view/{serie}/{season}/{episode}', name: 'show_episode', methods: ['GET'])]
+    public function showEpisode(Series $serie, Season $season, Episode $episode): Response
+    {
+        return $this->renderForm('series/episode.html.twig', [
+            'serie' => $serie,
+            'season' => $season,
+            'episode' => $episode,
         ]);
     }
 }

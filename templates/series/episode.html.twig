@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Épisode {{ episode.title }}
+{% endblock %}
+{% block main %}
+
+Titre de la série {{ serie.title }} <!-- titre de la série -->
+Saison numéro : {{ season.number }}
+Épisode {{ episode.number }} : {{ episode.title }}
+
+Date de sortie de l'épisode {{ episode.date }}
+
+IMDB : {{ episode.imdb }}
+
+IMDB Rating : {{ episode.imdbrating }}
+
+
+{% endblock %}

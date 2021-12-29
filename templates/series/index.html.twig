@@ -15,12 +15,7 @@
 						</div>
 						<div class="card-footer bg-transparent text-center">
 							<h5 class="card-title m-0">{{ series.title }}</h5>
-							<p class="card-text rating fw-bold yellow">IMDB :
-								{% for ratings in ratings %}
-									{% if ratings.series == series %}
-										{{ ratings.value }}
-									{% endif %}
-								{% endfor %}
+							<p class="card-text rating fw-bold yellow">IMDB : {{ series.externalrating[0].value }}
 							</p>
 						</div>
 					</div>

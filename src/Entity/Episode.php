@@ -100,9 +100,10 @@ class Episode
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): String
     {
-        return $this->date;
+        $date = $this->date == NULL ? "Pas de date pour cet épisode" : $this->date->format('d/m/Y');
+        return $date;
     }
 
     public function setDate(?\DateTimeInterface $date): self

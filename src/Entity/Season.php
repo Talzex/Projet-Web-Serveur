@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 
 /**
  * Season
@@ -44,6 +45,7 @@ class Season
      * @var \Episodes
      *
      * @ORM\OneToMany(targetEntity="Episode", mappedBy="season")
+     * @OrderBy({"number" = "ASC"})
      */
     private $episodes;
 
