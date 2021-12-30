@@ -10,7 +10,7 @@
 			{{ form_start(registrationForm,{
                 'attr' : {'class': 'd-flex flex-column ms-auto me-auto col-lg-4 col-md-5'}
             }) }}
-		<div class="d-inline-flex flex-column text-start py-2">
+		<div class="d-inline-flex flex-column text-start my-2">
 			{{ form_label(registrationForm.name, 'Nom',{
                 'label_attr' : {'class': 'form-label'}
             }) }}
@@ -24,7 +24,7 @@
 				{{ form_errors(registrationForm.name) }}
 			</div>
 		</div>
-		<div class="d-inline-flex flex-column text-start py-2">
+		<div class="d-inline-flex flex-column text-start my-2">
 			{{ form_label(registrationForm.email, 'Email',{
                 'label_attr' : {'class': 'form-label'}
             }) }}
@@ -39,7 +39,7 @@
 				{{ form_errors(registrationForm.email) }}
 			</div>
 		</div>
-		<div class="d-inline-flex flex-column text-start py-2">
+		<div class="d-inline-flex flex-column text-start my-2">
 			{{ form_label(registrationForm.plainPassword, 'Mot de passe',{
                 'label_attr' : {'class': 'form-label'}
             }) }}
@@ -53,7 +53,7 @@
 				{{ form_errors(registrationForm.plainPassword) }}
 			</div>
 		</div>
-		<div class="text-start py-2">
+		<div class="text-start my-2">
 			{{ form_label(registrationForm.country, 'Pays',{
                 'label_attr' : {'class': 'form-label'}
             }) }}

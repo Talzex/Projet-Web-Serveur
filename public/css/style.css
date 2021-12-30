@@ -5,6 +5,10 @@
 .yellow{
     color: var(--bs-yellow);
 }
+
+.red{
+    color: var(--bs-red);
+}
 .background-body {
     background-color: #222f3e;
 }
@@ -51,7 +55,9 @@ tbody td {
     padding: 0.5rem;
 }
 
-.external-link{
+.external-link, .commentaire{
     background-color: #34485f;
 }
+
+
 
