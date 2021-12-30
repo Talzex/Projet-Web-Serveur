@@ -59,5 +59,9 @@ tbody td {
     background-color: #34485f;
 }
 
+.bi-youtube::before {
+    margin-right: 10px;
+}
+
 
 
