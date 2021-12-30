@@ -23,6 +23,8 @@ class SeriesRepository extends ServiceEntityRepository
     {
         $offset = $numSeries * ($numPage - 1);
         return $this->createQueryBuilder('s')
+            ->select('s, r')
+            ->join('s.externalRating', 'r')
             ->orderBy('s.title', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($numSeries)
