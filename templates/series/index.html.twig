@@ -10,12 +10,13 @@
 					<div class="card bg-transparent text-white p-0 d-inline-flex border-0" style="width: 250px;">
 						<div class="card-body overflow-hidden text-center p-0">
 							<a href="{{ path('series_show', {'id': series.id}) }}">
-								<img class="poster rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="350px" width="250px">
+								<img class="poster rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster">
 							</a>
 						</div>
 						<div class="card-footer bg-transparent text-center">
 							<h5 class="card-title m-0">{{ series.title }}</h5>
-							<p class="card-text rating fw-bold yellow">IMDB : {{ series.externalrating[0].value }}
+							<p class="card-text rating fw-bold yellow">IMDB :
+								{{ series.externalrating[0].value }}
 							</p>
 						</div>
 					</div>
@@ -25,43 +26,43 @@
 			{% endfor %}
 		</div>
 		{% if series|length > 0 %}
-		<nav aria-label="Page navigation">
-			<ul class="pagination justify-content-center">
-				<li class="page-item">
-					<a class="page-link" href="{{ path('series_index')}}/{{ num_page - 1}}" aria-label="Previous">
-						<span aria-hidden="true">&laquo;</span>
-						<span class="sr-only">Previous</span>
-					</a>
-				</li>
-				{% if num_page >= 3 %}
+			<nav aria-label="Page navigation">
+				<ul class="pagination justify-content-center">
 					<li class="page-item">
-						<a class="page-link" href="{{ path('series_index') }}/{{ num_page - 2 }}">{{ num_page - 2 }}</a>
+						<a class="page-link" href="{{ path('series_index')}}/{{ num_page - 1}}" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+							<span class="sr-only">Previous</span>
+						</a>
 					</li>
-				{% endif %}
-				{% if num_page >= 2 %}
+					{% if num_page >= 3 %}
+						<li class="page-item">
+							<a class="page-link" href="{{ path('series_index') }}/{{ num_page - 2 }}">{{ num_page - 2 }}</a>
+						</li>
+					{% endif %}
+					{% if num_page >= 2 %}
+						<li class="page-item">
+							<a class="page-link" href="{{ path('series_index') }}/{{ num_page - 1 }}">{{ num_page - 1 }}</a>
+						</li>
+					{% endif %}
+					{% if num_page > 0 %}
+						<li class="page-item active">
+							<a class="page-link" href="{{ path('series_index') }}/{{ num_page }}">{{ num_page }}</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" href="{{ path('series_index') }}/{{ num_page + 1 }}">{{ num_page + 1 }}</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" href="{{ path('series_index') }}/{{ num_page + 2 }}">{{ num_page + 2 }}</a>
+						</li>
+					{% endif %}
 					<li class="page-item">
-						<a class="page-link" href="{{ path('series_index') }}/{{ num_page - 1 }}">{{ num_page - 1 }}</a>
+						<a class="page-link" href="{{ path('series_index')}}/{{ num_page + 1}}" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+							<span class="sr-only">Next</span>
+						</a>
 					</li>
-				{% endif %}
-				{% if num_page > 0 %}
-					<li class="page-item active">
-						<a class="page-link" href="{{ path('series_index') }}/{{ num_page }}">{{ num_page }}</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="{{ path('series_index') }}/{{ num_page + 1 }}">{{ num_page + 1 }}</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="{{ path('series_index') }}/{{ num_page + 2 }}">{{ num_page + 2 }}</a>
-					</li>
-				{% endif %}
-				<li class="page-item">
-					<a class="page-link" href="{{ path('series_index')}}/{{ num_page + 1}}" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-						<span class="sr-only">Next</span>
-					</a>
-				</li>
-			</ul>
-		</nav>
+				</ul>
+			</nav>
 		{% endif %}
 	</div>
 

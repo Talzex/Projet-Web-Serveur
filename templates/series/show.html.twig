@@ -5,10 +5,10 @@
 {% block main %}
 	<div class="container white mt-5">
 		<div class="row">
-			<div class="col-2 text-center">
+			<div class="col-lg-3 col-md-12 text-center">
 				<img class="rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="300px" width="200px">
 			</div>
-			<div class="col-10">
+			<div class="col-lg-9 col-md-12">
 				<div class="title">
 					<h2>{{ series.title }}</h2>
 				</div>
@@ -22,11 +22,6 @@
 						<i class="bi bi-calendar-date yellow"></i>
 						{{ series.yearStart }}</span>
 					<span class="yellow">? Saisons</span>
-                    <ul>
-						{% for season in series.seasons %}
-							<li><a href="{{ path('show_season', {'serie': series.id ,'season': season.id}) }}">Saison {{ season.number }}</a> : {{ season.episodes|length }} épisodes</li>
-						{% endfor %}
-					</ul>
 				</div>
 				<div class="plot mt-3">
 					{{series.plot}}
@@ -45,43 +40,70 @@
 						</p>
 					</li>
 					<li class="ms-3">
-						<span class="awards"><i class="bi bi-award-fill yellow"></i></i></span>
-						<p class="mt-2">{{ series.awards }}</p>
+						<span class="awards">
+							<i class="bi bi-award-fill yellow"></i>
+						</i>
 					</li>
-				</ul>
+				</span>
+				<p class="mt-2">{{ series.awards }}</p>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
+	<div>
+		<a class="btn btn-outline-dark" href="{{ path("series_imdb", {"id": series.id}) }}" role="button">
+			<p class="m-0 yellow rating fw-bold">IMDB :
+				{{ series.externalrating[0].value }}</p>
+		</a>
+	</div>
+	<div>
+		<a class="btn btn-outline-light " href="{{ path("series_trailer", {"id": series.id}) }}" role="button">
+			<i class="bi bi-youtube">
+				Bande Annonce</i>
+		</a>
+	</div>
+</div>
+<div class="row">
+	<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3">Liste des saisons</h2>
+	{% for season in series.seasons %}
+		<div class="col-lg-2 text-center mt-3 overflow-hidden">
+			<div class="card-body overflow-hidden text-center p-0">
+				<a href="{{ path('show_season', {'serie': series.id ,'season': season.id}) }}">
+					<img class="rounded poster" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster">
+
+				</a>
+			</div>
+			<div class="card-footer border-0 bg-transparent text-center">
+				<h5 class="card-text m-0">Saisons
+					{{ season.number }}
+					:
+					{{ season.episodes|length }}
+					épisodes</h5>
 			</div>
 		</div>
-		<div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
-            <div>
-                <a class="btn btn-outline-dark" href="{{ path("series_imdb", {"id": series.id}) }}" role="button">
-                    <p class="m-0 yellow rating fw-bold">IMDB : {{ series.externalrating[0].value }}</p>
-                </a>
-            </div>
-            <div>
-                <a class="btn btn-outline-light " href="{{ path("series_trailer", {"id": series.id}) }}" role="button"><i class="bi bi-youtube"> Bande Annonce</i></a>
-            </div>
-		</div>
-		{% if app.user %}
-			<h2>Ajouter un commentaire</h2>
-			{{ form(ratingForm) }}
-		{% endif %}
-		<ul>
-			{% for rating in series.ratings %}
-				<li>
-					{{ rating.user }}
-					<br>
-					{{ rating.value }}/10
-					<br>
-					{{ rating.comment }}
-					<br>
-					{{ rating.date }}
-				</li>
-			{% endfor %}
-			</ul>
-	</div>
-	<a href="{{ path('series_index') }}">back to list</a>
+	{% endfor %}
 
-	<a href="{{ path('series_edit', {'id': series.id}) }}">edit</a>
+</div>
+{% if app.user %}
+	<h2>Ajouter un commentaire</h2>
+	{{ form(ratingForm) }}{% endif %}
+	<ul>
+		{% for rating in series.ratings %}
+			<li>
+				{{ rating.user }}
+				<br>
+				{{ rating.value }}/10
+				<br>
+				{{ rating.comment }}
+				<br>
+				{{ rating.date }}
+			</li>
+		{% endfor %}
+	</ul>
+</div>
+<a href="{{ path('series_index') }}">back to list</a>
 
-	{{ include('series/_delete_form.html.twig') }}
-{% endblock %}
+<a href="{{ path('series_edit', {'id': series.id}) }}">edit</a>
+
+{{ include('series/_delete_form.html.twig') }}{% endblock %}
