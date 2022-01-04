@@ -29,7 +29,7 @@
 				<ul class="d-flex flex-wrap list-unstyled mt-3">
 					<li>
 						<span class="director yellow">Directeur</span>
-						<p>{{ series.director }}</p>
+						<p class="mt-2">{{ series.director }}</p>
 					</li>
 					<li class="ms-3">
 						<span class="actor yellow">Actor</span>
@@ -71,11 +71,12 @@
 						</a>
 					</div>
 					<div class="card-footer border-0 bg-transparent text-center">
-						<h5 class="card-text m-0">Saisons
+						<h5 class="card-text m-0">Saison
 							{{ season.number }}
-							:
-							{{ season.episodes|length }}
-							épisodes</h5>
+						</h5>
+						<h6>{{ season.episodes|length }}
+							épisodes
+						</h6>
 					</div>
 				</div>
 			{% endfor %}

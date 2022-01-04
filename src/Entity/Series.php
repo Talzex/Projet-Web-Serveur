@@ -205,8 +205,8 @@ class Series
     }
 
     public function getDirector(): ?string
-    {
-        return $this->director;
+    { 
+        return $this->director == "" ? "Inconnu" : $this->director;
     }
 
     public function setDirector(?string $director): self
