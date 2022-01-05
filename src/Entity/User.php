@@ -259,6 +259,17 @@ class User implements UserInterface
         return $this;
     }
 
+    public function follow(Series $series): self
+    {
+        if (!$this->series->contains($series)) {
+            $this->series[] = $series;
+        } else {
+            $this->series->removeElement($series);
+        }
+
+        return $this;
+    }
+
     public function __toString()
     {
         return $this->getName();

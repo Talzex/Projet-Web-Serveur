@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Form\SeriesType;
 use App\Form\RatingType;
 use App\Repository\SeriesRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -17,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/series')]
@@ -149,5 +151,17 @@ class SeriesController extends AbstractController
             'season' => $season,
             'episode' => $episode,
         ]);
+    }
+
+    #[Route('/follow/{id}', name: 'follow_serie', methods: ['GET'])]
+    public function followSerie(Series $series): Response
+    {
+        $user = $this->getUser();
+        dump($user);
+        if($user != NULL){
+            $user->follow($series);
+        }
+        die;
+        return $this->redirectToRoute('series_show', ['id' => $series->getId()]);
     }
 }
