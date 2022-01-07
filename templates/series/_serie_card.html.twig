@@ -1,0 +1,76 @@
+<div class="row">
+        <div class="col-lg-3 col-md-12 col-12 text-center">
+            <img class="rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="300px" width="200px">
+        </div>
+        <div class="col-lg-9 col-md-12 col-12">
+            <div class="title">
+                <h2>{{ series.title }}</h2>
+            </div>
+            <div class="tags">
+                <span>
+                    {% for genre in series.genre %}
+                        {{ genre.name }}
+                    {% endfor %}
+                </span>
+                <span>
+                    <i class="bi bi-calendar-date yellow"></i>
+                    {{ series.yearStart }}</span>
+                <span class="yellow">{{ series.seasons|length }} Saison{% if series.seasons|length > 1 %}s{% endif %}</span>
+            </div>
+            <div class="plot mt-3">
+                {{ series.plot }}
+            </div>
+            <ul class="d-flex flex-wrap list-unstyled mt-3">
+                <li>
+                    <span class="director yellow">Directeur</span>
+                    <p class="mt-2">{{ series.director }}</p>
+                </li>
+                <li class="ms-3">
+                    <span class="actor yellow">Actor</span>
+                    <p class="mt-2">
+                        {% for actors in series.actor %}
+                            {{ actors.name }}
+                        {% endfor %}
+                    </p>
+                </li>
+                <li class="ms-3">
+                    <span class="awards">
+                        <i class="bi bi-award-fill yellow"></i>
+                    </span>
+                    <p class="mt-2">{{ series.awards }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
+        <div class="d-flex align-items-center">
+            <div class="me-3">
+                <a class="btn btn-outline-dark" href="{{ path("series_imdb", {"id": series.id}) }}" role="button">
+                <i class="bi bi-film yellow"></i>
+                <p class="m-0 yellow rating fw-bold d-inline">IMDB {{ series.externalrating[0].value }}</p>
+            </a>
+            </div>
+            
+            <div class="ms-3">
+                <a href="{{ path("follow_serie", {"id": series.id}) }}">
+                    {% if app.user %}
+                        {% if series in app.user.series %}
+                                <i class="bi bi-heart-fill red"></i>
+                        {% else %}
+                            <i class="bi bi-heart red"></i>
+                        {% endif %}
+                    {% else %}
+                        <i class="bi bi-heart red"></i>
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+        
+        <div>
+            <a class="btn btn-outline-light" href="{{ path("series_trailer", {"id": series.id}) }}" role="button">
+                <i class="bi bi-youtube"></i>
+                <p class="d-inline m-0">Bande Annonce</p>
+            </a>
+        </div>
+    </div>
+    

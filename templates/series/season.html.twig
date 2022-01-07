@@ -1,16 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig'%}
 
 {% block title %}Saisons de {{ serie.title }}
 {% endblock %}
 {% block main %}
+<div class="container white mt-5">
+    {% include 'series/_serie_card.html.twig' with {series: serie} %}
 
-{{ serie.title }} <!-- titre de la série -->
+    <div class="row">
+			<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Liste des épisodes</h2>
+			{% for episodes in season.episodes %}
+				<div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center mt-3 overflow-hidden">
+					<div class="card-body text-center p-0">
+						<a href="{{ path('show_episode', {'serie': serie.id, 'season': season.id, 'episode': episodes.id}) }}">
+                            <p>Episode {{episodes.number}} : {{episodes.title}}</p>
+						</a>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+        <p>Il y a {{ season.episodes|length }} épisodes dans la saison {{ season.number }} de {{ serie.title }}</p>
+</div>
 
-    <p>Il y a {{ season.episodes|length }} épisodes dans la saison {{ season.number }} de {{ serie.title }}</p>
-    <ul>
-        {% for episode in season.episodes %}
-            <li><a href="{{ path('show_episode', {'serie': serie.id, 'season': season.id, 'episode': episode.id}) }}">{{episode.title}}</a></li>
-        {% endfor %}
-    </ul>
 
 {% endblock %}
