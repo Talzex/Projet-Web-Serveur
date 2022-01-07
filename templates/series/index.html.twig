@@ -3,10 +3,10 @@
 {% endblock %}
 {% block main %}
 	<h1 class="text-white text-center">Listes des séries</h1>
-	<div class="container-fluid">
-		<div class="row justify-content-between">
+	<div class="container">
+		<div class="row justify-content-center justify-content-md-evenly">
 			{% for series in series %}
-				<div class="col-xs-1 col-sm-6 col-md-4 col-lg-3 col-xl-auto py-3">
+				<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-auto py-3 text-center">
 					<div class="card bg-transparent text-white p-0 d-inline-flex border-0" style="width: 250px;">
 						<div class="card-body overflow-hidden text-center p-0">
 							<a href="{{ path('series_show', {'id': series.id}) }}">

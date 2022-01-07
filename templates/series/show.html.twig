@@ -49,25 +49,33 @@
 			</div>
 		</div>
 		<div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
-			<div>
-				<a class="btn btn-outline-dark" href="{{ path("series_imdb", {"id": series.id}) }}" role="button">
-					<p class="m-0 yellow rating fw-bold">IMDB :
-						{{ series.externalrating[0].value }}</p>
+			<div class="d-flex align-items-center">
+				<div class="me-3">
+					<a class="btn btn-outline-dark" href="{{ path("series_imdb", {"id": series.id}) }}" role="button">
+					<i class="bi bi-film yellow"></i>
+					<p class="m-0 yellow rating fw-bold d-inline">IMDB {{ series.externalrating[0].value }}</p>
 				</a>
+				</div>
+				
+				<div class="ms-3">
+					<a href="{{ path("follow_serie", {"id": series.id}) }}">
+						{% if series in app.user %}
+							{% if series in app.user.series %}
+									<i class="bi bi-heart-fill red"></i>
+							{% else %}
+								<i class="bi bi-heart red"></i>
+							{% endif %}
+						{% else %}
+							<i class="bi bi-heart red"></i>
+						{% endif %}
+					</a>
+				</div>
 			</div>
+			
 			<div>
-			<a href="{{ path("follow_serie", {"id": series.id}) }}">
-				{% if series in app.user.series %}
-						<i class="bi bi-heart-fill red"></i>
-				{% else %}
-					<i class="bi bi-heart red"></i>
-				{% endif %}
-			</a>
-			</div>
-			<div>
-				<a class="btn btn-outline-light " href="{{ path("series_trailer", {"id": series.id}) }}" role="button">
+				<a class="btn btn-outline-light" href="{{ path("series_trailer", {"id": series.id}) }}" role="button">
 					<i class="bi bi-youtube"></i>
-					<p>Bande Annonce</p>
+					<p class="d-inline m-0">Bande Annonce</p>
 				</a>
 			</div>
 		</div>
