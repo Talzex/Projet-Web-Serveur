@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Rating
  *
  * @ORM\Table(name="rating", indexes={@ORM\Index(name="IDX_D8892622A76ED395", columns={"user_id"}), @ORM\Index(name="IDX_D88926225278319C", columns={"series_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\RatingRepository")
  */
 class Rating
 {

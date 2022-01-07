@@ -9,6 +9,7 @@ use App\Entity\Rating;
 use App\Entity\User;
 use App\Form\SeriesType;
 use App\Form\RatingType;
+use App\Repository\RatingRepository;
 use App\Repository\SeriesRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -59,27 +61,35 @@ class SeriesController extends BaseController
     }
 
     #[Route('/view/{id}', name: 'series_show', methods: ['GET', 'POST'])]
-    public function show(EntityManagerInterface $entityManager, Series $series, Request $request): Response
-    {            
-        $rating = new Rating;
+    public function show(EntityManagerInterface $entityManager, Series $serie, RatingRepository $ratingRepository, Request $request): Response
+    {
+        $user = $this->getUser();
+
+        $rating = $ratingRepository->isRated($user, $serie) ? $ratingRepository->getRating($user, $serie) : new Rating;
         $ratingForm = $this->createForm(RatingType::class, $rating);
         
         $ratingForm->handleRequest($request);
 
+        $errors = [];
+
         if($ratingForm->isSubmitted() && $ratingForm->isValid()){
-            $date = new \DateTime();
-            $date->format('Y-m-d H:i:s');
-            $rating->setDate($date);
-            $rating->setSeries($series);
-            $rating->setUser($this->getUser());
-            
-            $entityManager->persist($rating);
-            $entityManager->flush();
+            $isRated = $ratingRepository->isRated($user, $serie);
+            if(!$isRated){
+                $date = new \DateTime();
+                $date->format('Y-m-d H:i:s');
+                $rating->setDate($date);
+                $rating->setSeries($serie);
+                $rating->setUser($user);
+                
+                $entityManager->persist($rating);
+                $entityManager->flush();
+            }
         }
 
         return $this->render('series/show.html.twig', [
-            'series' => $series,
-            'ratingForm' => $ratingForm->createView()
+            'series' => $serie,
+            'ratingForm' => $ratingForm->createView(),
+            'errors' => $errors
         ]);
     }
     #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
