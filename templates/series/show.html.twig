@@ -59,7 +59,7 @@
 				
 				<div class="ms-3">
 					<a href="{{ path("follow_serie", {"id": series.id}) }}">
-						{% if series in app.user %}
+						{% if app.user %}
 							{% if series in app.user.series %}
 									<i class="bi bi-heart-fill red"></i>
 							{% else %}
