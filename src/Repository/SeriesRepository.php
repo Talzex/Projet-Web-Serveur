@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Series;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Series|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,28 +20,36 @@ class SeriesRepository extends ServiceEntityRepository
         parent::__construct($registry, Series::class);
     }
 
-    public function getSeries(int $numPage = 1, int $numSeries)
+    public function getSeries($currentPage = 1)
     {
-        $offset = $numSeries * ($numPage - 1);
-        return $this->createQueryBuilder('s')
+        $query = $this->createQueryBuilder('s')
             ->select('s, r')
             ->join('s.externalRating', 'r')
             ->orderBy('s.title', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($numSeries)
             ->getQuery()
-            ->getResult()
         ;
+
+        return $this->paginate($query, $currentPage);
+    }
+
+    public function paginate($dql, $page = 1, $limit = 24)
+    {
+        $paginator = new Paginator($dql);
+
+        $paginator->getQuery()
+            ->setFirstResult($limit * ($page - 1)) // Offset
+            ->setMaxResults($limit); // Limit
+
+        return $paginator;
     }
 
     public function getSeriesByName(string $search)
     {
         return $this->createQueryBuilder('s')
             ->where('s.title LIKE :search')
-            ->setParameter('search', '%'.$search.'%')
+            ->setParameter('search', '%' . $search . '%')
             ->orderBy('s.title', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 }

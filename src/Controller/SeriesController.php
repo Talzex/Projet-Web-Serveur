@@ -23,21 +23,34 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 #[Route('/series')]
 class SeriesController extends AbstractController
 {
 
-    #[Route('/{numPage}', name: 'series_index', methods: ['GET'])]
-    public function index(SeriesRepository $seriesRepo, int $numPage = 1): Response
+    #[Route('/', name: 'series_index', methods: ['GET'])]
+    public function index(Request $request, SeriesRepository $seriesRepo): Response
     {
+        $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
+        $series = $seriesRepo->getSeries($numPage);
+        $totalSeries = $series->count();
+        $iterator = $series->getIterator();
+        $maxPages = ceil($totalSeries / 24);
+        return $this->render('series/index.html.twig', [
+            'series' => $series,
+            'thisPage' => $numPage,
+            'maxPages' =>$maxPages
+        ]);
+
+        /*
         $numberSeries = 24;
         $series = $seriesRepo->getSeries($numPage, $numberSeries);
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'num_page' => $numPage
-        ]);
+        ]);*/
     }
 
     #[Route('/new', name: 'series_new', methods: ['GET', 'POST'])]
@@ -67,8 +80,8 @@ class SeriesController extends AbstractController
         $user = $this->getUser();
         $rating = new Rating;
         $submitText = "Envoyer";
-        if($user != NULL){
-            if($ratingRepository->isRated($user, $serie)){
+        if ($user != NULL) {
+            if ($ratingRepository->isRated($user, $serie)) {
                 $rating = $ratingRepository->getRating($user, $serie);
                 $submitText = "Modifier";
             }
@@ -77,17 +90,17 @@ class SeriesController extends AbstractController
         $ratingForm = $this->createForm(RatingType::class, $rating, [
             'label' => $submitText,
         ]);
-        
+
         $ratingForm->handleRequest($request);
 
         $errors = [];
 
-        if($ratingForm->isSubmitted() && $ratingForm->isValid() && $user != NULL){
+        if ($ratingForm->isSubmitted() && $ratingForm->isValid() && $user != NULL) {
             $isRated = $ratingRepository->isRated($user, $serie);
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
             $rating->setDate($date);
-            if(!$isRated){
+            if (!$isRated) {
                 $rating->setSeries($serie);
                 $rating->setUser($user);
                 $entityManager->persist($rating);
@@ -111,9 +124,9 @@ class SeriesController extends AbstractController
     public function imdb(Series $series): Response
     {
         $series_url = $series->getImdb();
-        return $this->redirect('https://www.imdb.com/title/'.$series_url);
+        return $this->redirect('https://www.imdb.com/title/' . $series_url);
     }
-            
+
 
     #[Route('/{id}/edit', name: 'series_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Series $series, EntityManagerInterface $entityManager): Response
@@ -136,7 +149,7 @@ class SeriesController extends AbstractController
     #[Route('/delete/{id}', name: 'series_delete', methods: ['POST'])]
     public function delete(Request $request, Series $series, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$series->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $series->getId(), $request->request->get('_token'))) {
             $entityManager->remove($series);
             $entityManager->flush();
         }
@@ -150,7 +163,8 @@ class SeriesController extends AbstractController
         $poster = $serie->getPoster();
         $headers = array(
             'Content-Type'     => 'image/png',
-            'Content-Disposition' => 'inline; filename="'.$poster.'"');
+            'Content-Disposition' => 'inline; filename="' . $poster . '"'
+        );
         return new Response(stream_get_contents($poster, -1, 0), 200, $headers);
     }
 
@@ -178,11 +192,24 @@ class SeriesController extends AbstractController
     {
         /** @var User */
         $user = $this->getUser();
-        dump($user);    
-        if($user != NULL){
+        dump($user);
+        if ($user != NULL) {
             $user->followToggle($series);
             $manager->flush();
         }
         return $this->redirectToRoute('series_show', ['id' => $series->getId()]);
+    }
+
+    #[Route('/following', name: 'user_series', methods: ['GET'])]
+    public function userSeries(): Response
+    {
+        /** @var User */
+        $user = $this->getUser();
+        $series = $user->getSeries() != NULL ? $user->getSeries() : "Vous ne suivez aucune série.";
+
+        return $this->render('series/index.html.twig', [
+            'series' => $series,
+            'num_page' => 1
+        ]);
     }
 }
