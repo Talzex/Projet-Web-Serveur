@@ -24,7 +24,7 @@
 					<span class="yellow">{{ series.seasons|length }} Saisons</span>
 				</div>
 				<div class="plot mt-3">
-					{{series.plot}}
+					{{ series.plot }}
 				</div>
 				<ul class="d-flex flex-wrap list-unstyled mt-3">
 					<li>
@@ -56,8 +56,18 @@
 				</a>
 			</div>
 			<div>
+			<a href="{{ path("follow_serie", {"id": series.id}) }}">
+				{% if series in app.user.series %}
+						<i class="bi bi-heart-fill red"></i>
+				{% else %}
+					<i class="bi bi-heart red"></i>
+				{% endif %}
+			</a>
+			</div>
+			<div>
 				<a class="btn btn-outline-light " href="{{ path("series_trailer", {"id": series.id}) }}" role="button">
-					<i class="bi bi-youtube">Bande Annonce</i>
+					<i class="bi bi-youtube"></i>
+					<p>Bande Annonce</p>
 				</a>
 			</div>
 		</div>
