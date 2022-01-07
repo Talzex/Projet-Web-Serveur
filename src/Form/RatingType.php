@@ -32,7 +32,7 @@ class RatingType extends AbstractType
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer',
+                'label' => $options['label'],
                 'attr' => [
                     'class' => 'btn btn-outline-light my-4'
                 ]

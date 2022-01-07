@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/series')]
-class SeriesController extends BaseController
+class SeriesController extends AbstractController
 {
 
     #[Route('/{numPage}', name: 'series_index', methods: ['GET'])]
@@ -63,24 +63,33 @@ class SeriesController extends BaseController
     #[Route('/view/{id}', name: 'series_show', methods: ['GET', 'POST'])]
     public function show(EntityManagerInterface $entityManager, Series $serie, RatingRepository $ratingRepository, Request $request): Response
     {
+        /** @var User */
         $user = $this->getUser();
+        $rating = new Rating;
+        $submitText = "Envoyer";
+        if($user != NULL){
+            if($ratingRepository->isRated($user, $serie)){
+                $rating = $ratingRepository->getRating($user, $serie);
+                $submitText = "Modifier";
+            }
+        }
 
-        $rating = $ratingRepository->isRated($user, $serie) ? $ratingRepository->getRating($user, $serie) : new Rating;
-        $ratingForm = $this->createForm(RatingType::class, $rating);
+        $ratingForm = $this->createForm(RatingType::class, $rating, [
+            'label' => $submitText,
+        ]);
         
         $ratingForm->handleRequest($request);
 
         $errors = [];
 
-        if($ratingForm->isSubmitted() && $ratingForm->isValid()){
+        if($ratingForm->isSubmitted() && $ratingForm->isValid() && $user != NULL){
             $isRated = $ratingRepository->isRated($user, $serie);
+            $date = new \DateTime();
+            $date->format('Y-m-d H:i:s');
+            $rating->setDate($date);
             if(!$isRated){
-                $date = new \DateTime();
-                $date->format('Y-m-d H:i:s');
-                $rating->setDate($date);
                 $rating->setSeries($serie);
                 $rating->setUser($user);
-                
                 $entityManager->persist($rating);
                 $entityManager->flush();
             }
@@ -89,7 +98,6 @@ class SeriesController extends BaseController
         return $this->render('series/show.html.twig', [
             'series' => $serie,
             'ratingForm' => $ratingForm->createView(),
-            'errors' => $errors
         ]);
     }
     #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
@@ -168,6 +176,7 @@ class SeriesController extends BaseController
     #[Route('/follow/{id}', name: 'follow_serie', methods: ['GET'])]
     public function followSerie(Series $series, EntityManagerInterface $manager): Response
     {
+        /** @var User */
         $user = $this->getUser();
         dump($user);    
         if($user != NULL){
