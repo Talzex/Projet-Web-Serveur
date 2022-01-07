@@ -60,8 +60,25 @@ tbody td {
 }
 
 .bi-youtube::before {
-    margin-right: 10px;
+        margin-right: 10px;
 }
 
+.test{
+    border: none !important;
+    border-bottom: 1px solid white !important;
+    padding: 0 !important;
+    background-color: #222f3e !important;
+    border-radius: 0 !important;
+    width: 20px !important;
+    display: inline !important;
+    color: white !important;
+    text-align: center !important;
+}
 
+.test:hover{
+    border-bottom: 1px solid rgb(206, 206, 206) !important;
+}
 
+.test:focus{
+    box-shadow: none !important;
+}

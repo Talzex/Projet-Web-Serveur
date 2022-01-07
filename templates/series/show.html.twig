@@ -102,12 +102,10 @@
 					</div>
 				</div>
 				<div class="col-lg-1 col-2 my-2">
-					{{ form_label(ratingForm.value, 'Note sur 10 ',{
-					'label_attr' : {'class': 'form-label'}
-				}) }}
+					Note : 
 					{{ form_widget(ratingForm.value,{
-					'attr' : {'class': 'form-control'}
-				}) }}
+					'attr' : {'class': 'form-control test', 'maxlength': '2'}
+				}) }}/10
 
 					<small>{{ form_help(ratingForm.value) }}</small>
 

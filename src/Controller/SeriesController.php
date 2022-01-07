@@ -12,6 +12,7 @@ use App\Form\RatingType;
 use App\Repository\SeriesRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -22,13 +23,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/series')]
-class SeriesController extends AbstractController
+class SeriesController extends BaseController
 {
 
     #[Route('/{numPage}', name: 'series_index', methods: ['GET'])]
     public function index(SeriesRepository $seriesRepo, int $numPage = 1): Response
     {
-        $series = $seriesRepo->getSeries($numPage, 20);
+        $numberSeries = 24;
+        $series = $seriesRepo->getSeries($numPage, $numberSeries);
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
@@ -154,14 +156,14 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/follow/{id}', name: 'follow_serie', methods: ['GET'])]
-    public function followSerie(Series $series): Response
+    public function followSerie(Series $series, EntityManagerInterface $manager): Response
     {
         $user = $this->getUser();
-        dump($user);
+        dump($user);    
         if($user != NULL){
-            $user->follow($series);
+            $user->followToggle($series);
+            $manager->flush();
         }
-        die;
         return $this->redirectToRoute('series_show', ['id' => $series->getId()]);
     }
 }
