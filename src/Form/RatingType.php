@@ -18,6 +18,7 @@ class RatingType extends AbstractType
         $builder
 
             ->add('comment', TextareaType::class, [
+                'required'   => false,
                 'attr' => [
                     'placeholder' => 'Ce film est vraiment chouette... Je vous conseille de le regarder!',
                 ]
