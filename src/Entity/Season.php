@@ -32,7 +32,7 @@ class Season
     private $number;
 
     /**
-     * @var \Series
+     * @var \Series|null
      *
      * @ORM\ManyToOne(targetEntity="Series", inversedBy="seasons")
      * @ORM\JoinColumns({
@@ -84,34 +84,33 @@ class Season
     }
 
     /**
-     * @return Collection|Season[]
+     * @return Collection|Episode[]
      */
     public function getEpisodes(): Collection
     {
         return $this->episodes;
     }
 
-    public function addEpisode(Season $episode): self
+    public function addEpisode(Episode $episode): self
     {
         if (!$this->episodes->contains($episode)) {
             $this->episodes[] = $episode;
-            $episode->setSeasons($this);
+            $episode->setSeason($this);
         }
 
         return $this;
     }
 
-    public function removeEpisode(Season $episode): self
+    public function removeEpisode(Episode $episode): self
     {
         if ($this->episodes->removeElement($episode)) {
             // set the owning side to null (unless already changed)
-            if ($episode->getSeasons() === $this) {
-                $episode->setSeasons(null);
+            if ($episode->getSeason() === $this) {
+                $episode->setSeason(null);
             }
         }
 
         return $this;
     }
-
 
 }

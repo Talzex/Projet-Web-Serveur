@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[Route('/series')]
 class SeriesController extends AbstractController
@@ -86,6 +88,19 @@ class SeriesController extends AbstractController
                 $rating = $ratingRepository->getRating($user, $serie);
                 $submitText = "Modifier";
             }
+
+            $isWatched = false;
+            $seasons = $serie->getSeasons();
+            $episodes = new ArrayCollection();
+            foreach($seasons as $s){
+                foreach($s->getEpisodes() as $e){
+                    $episodes->add($e);
+                }
+            }
+            $compare = array_diff($episodes->toArray(), $user->getEpisode()->toArray());
+            if (empty($compare)){
+                $isWatched = true;
+            }
         }
 
         $ratingForm = $this->createForm(RatingType::class, $rating, [
@@ -110,6 +125,7 @@ class SeriesController extends AbstractController
         return $this->render('series/show.html.twig', [
             'series' => $serie,
             'ratingForm' => $ratingForm->createView(),
+            'is_watched' => $isWatched
         ]);
     }
     #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
@@ -221,5 +237,24 @@ class SeriesController extends AbstractController
             'thisPage' => $numPage,
             'maxPages' =>$maxPages
         ]);
+    }
+
+    #[Route('/watch/{id}', name: 'watched_serie', methods: ['GET'])]
+    public function watchSerie(Request $request, Series $serie, EntityManagerInterface $manager): Response
+    {
+        /** @var User */
+        $user = $this->getUser();
+
+        if($user != NULL){
+            $seasons = $serie->getSeasons();
+            foreach($seasons as $s){
+                foreach($s->getEpisodes() as $e){
+                    $user->addEpisode($e);
+                }
+            }
+        }
+        $manager->flush();
+
+        return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
     }
 }

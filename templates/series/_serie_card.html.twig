@@ -64,6 +64,19 @@
                     {% endif %}
                 </a>
             </div>
+            <div class="ms-3">
+                <a href="{{ path("watched_serie", {"id": series.id}) }}">
+                    {% if app.user %}
+                        {% if is_watched == true %}
+                                <i class="bi bi-eye-fill"></i>
+                        {% else %}
+                            <i class="bi bi-eye"></i>
+                        {% endif %}
+                    {% else %}
+                        <i class="bi bi-eye"></i>
+                    {% endif %}
+                </a>
+            </div>
         </div>
         
         <div>
