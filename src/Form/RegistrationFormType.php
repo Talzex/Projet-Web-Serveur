@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Country;
+use Doctrine\ORM\EntityRepository;
 use Gregwar\CaptchaBundle\Type\CaptchaType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -21,12 +24,17 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email')
             ->add('name')
-            ->add('country')
+            ->add('country', EntityType::class, [
+                'class' => Country::class,
+                'query_builder' => function (EntityRepository $e) {
+                    return $e->createQueryBuilder('c')->orderBy('c.name', 'ASC');
+                },
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter les termes.',
                     ]),
                 ],
             ])
@@ -42,7 +50,6 @@ class RegistrationFormType extends AbstractType
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                        // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
