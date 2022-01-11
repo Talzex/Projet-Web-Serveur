@@ -43,13 +43,14 @@ class SeriesRepository extends ServiceEntityRepository
         return $paginator;
     }
 
-    public function getSeriesByName(string $search)
+    public function getSeriesByName(string $search, $currentPage = 1)
     {
-        return $this->createQueryBuilder('s')
-            ->where('s.title LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
-            ->orderBy('s.title', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('s')
+        ->where('s.title LIKE :search')
+        ->setParameter('search', '%' . $search . '%')
+        ->orderBy('s.title', 'ASC')
+        ->getQuery();
+
+        return $this->paginate($query, $currentPage);
     }
 }

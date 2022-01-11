@@ -33,24 +33,25 @@ class SeriesController extends AbstractController
     public function index(Request $request, SeriesRepository $seriesRepo): Response
     {
         $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
+        $query = NULL;
         $series = $seriesRepo->getSeries($numPage);
+        if($request){
+            $searchRequest = $request->query->all();
+            if($searchRequest != NULL && $request->query->get('query') != NULL){
+                $query = htmlspecialchars($request->query->get('query'));
+                $series = $seriesRepo->getSeriesByName($query, $numPage);
+            }
+        }
+
         $totalSeries = $series->count();
-        $iterator = $series->getIterator();
         $maxPages = ceil($totalSeries / 24);
+        
         return $this->render('series/index.html.twig', [
             'series' => $series,
+            'query' => $query,
             'thisPage' => $numPage,
             'maxPages' =>$maxPages
         ]);
-
-        /*
-        $numberSeries = 24;
-        $series = $seriesRepo->getSeries($numPage, $numberSeries);
-
-        return $this->render('series/index.html.twig', [
-            'series' => $series,
-            'num_page' => $numPage
-        ]);*/
     }
 
     #[Route('/new', name: 'series_new', methods: ['GET', 'POST'])]
@@ -92,8 +93,6 @@ class SeriesController extends AbstractController
         ]);
 
         $ratingForm->handleRequest($request);
-
-        $errors = [];
 
         if ($ratingForm->isSubmitted() && $ratingForm->isValid() && $user != NULL) {
             $isRated = $ratingRepository->isRated($user, $serie);
@@ -201,15 +200,19 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/following', name: 'user_series', methods: ['GET'])]
-    public function userSeries(): Response
+    public function userSeries(Request $request): Response
     {
         /** @var User */
         $user = $this->getUser();
         $series = $user->getSeries() != NULL ? $user->getSeries() : "Vous ne suivez aucune série.";
+        $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
+        $totalSeries = $series->count();
+        $maxPages = ceil($totalSeries / 24);
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
-            'num_page' => 1
+            'thisPage' => $numPage,
+            'maxPages' =>$maxPages
         ]);
     }
 }

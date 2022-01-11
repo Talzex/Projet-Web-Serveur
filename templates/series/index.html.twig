@@ -2,7 +2,7 @@
 {% block title %}Series
 {% endblock %}
 {% block main %}
-	<h1 class="text-white text-center">Listes des séries</h1>
+	<h1 class="text-white text-center">Listes des séries{% if app.user %} que vous suivez{% endif %}</h1>
 	<div class="container">
 		<div class="row justify-content-center justify-content-md-evenly">
 			{% for series in series %}
@@ -35,19 +35,19 @@
 						</a>
 					</li>
 					<li class="page-item {{ thisPage < 3 ? 'disabled' }}">
-						<a class="page-link" href="{{ path('series_index', {page: thisPage - 2 < 1 ? 1 : thisPage - 2})}}">{{ thisPage - 2 }}</a>
+							<a class="page-link" href="{{ path('series_index', {page: thisPage - 2 < 1 ? 1 : thisPage - 2})}}">{{ thisPage - 2 }}</a>
 					</li>
 					<li class="page-item {{ thisPage < 2 ? 'disabled' }}">
-						<a class="page-link" href="{{ path('series_index', {page: thisPage - 1 < 1 ? 1 : thisPage - 1})}}">{{ thisPage - 1 }}</a>
+						<a class="page-link" href="{{ path('series_index', {query: query, page: thisPage - 1 < 1 ? 1 : thisPage - 1})}}">{{ thisPage - 1 }}</a>
 					</li>
 					<li class="page-item {{ thisPage < 1 ? 'disabled' }}">
-						<a class="page-link" href="{{ path('series_index', {page: thisPage < 1 ? 1 : thisPage})}}">{{ thisPage }}</a>
+						<a class="page-link" href="{{ path('series_index', {query: query, page: thisPage < 1 ? 1 : thisPage})}}">{{ thisPage }}</a>
 					</li>
 					<li class="page-item {{ thisPage + 1 > maxPages ? 'disabled' }}">
-						<a class="page-link" href="{{ path('series_index', {page: thisPage + 1 > maxPages ? 1 : thisPage + 1})}}">{{ thisPage + 1}}</a>
+							<a class="page-link" href="{{ path('series_index', {query: query, page: thisPage + 1 > maxPages ? 1 : thisPage + 1})}}">{{ thisPage + 1}}</a>
 					</li>
 					<li class="page-item {{ thisPage + 2 > maxPages ? 'disabled' }}">
-						<a class="page-link" href="{{ path('series_index', {page: thisPage + 2 > maxPages ? 1 : thisPage + 2})}}">{{ thisPage + 2}}</a>
+						<a class="page-link" href="{{ path('series_index', {query: query, page: thisPage + 2 > maxPages ? 1 : thisPage + 2})}}">{{ thisPage + 2}}</a>
 					</li>
 					<li class="page-item">
 						<a class="page-link" href="{{ path('series_index', {page: thisPage + 1 > maxPages ? 1 : thisPage + 1})}}" aria-label="Next">
@@ -59,7 +59,4 @@
 			</nav>
 		{% endif %}
 	</div>
-
-
-	<a href="{{ path('series_new') }}">Create new</a>
 {% endblock %}
