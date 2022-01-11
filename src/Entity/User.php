@@ -32,6 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=128, nullable=false)
+     * @Assert\NotBlank(message="Veuillez renseigner votre nom.")
      */
     private $name;
 
@@ -39,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=128, nullable=false)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Veuillez renseigner votre e-mail.")
      * @Assert\Email()
      */
     private $email;
@@ -73,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $userId;
 
     /**
-     * @var \Country
+     * @var Country|null
      *
      * @ORM\ManyToOne(targetEntity="Country")
      * @ORM\JoinColumns({
