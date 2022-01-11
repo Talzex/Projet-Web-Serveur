@@ -14,9 +14,9 @@
                     <i class="bi bi-film yellow"></i>
                     <p class="m-0 yellow rating fw-bold d-inline">IMDB Episode {{episode.number}} :  {{ episode.imdbrating }}/10</p>
                 </a>
+				{% set ytLink = serie.youtubeTrailer | split('v=') %}
+				<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ serie.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
 		</div>
 	</div>
-
-
 {% endblock %}
