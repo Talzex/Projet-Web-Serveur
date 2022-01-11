@@ -9,16 +9,13 @@
     <div class="row">
 			<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Liste des épisodes</h2>
 			{% for episodes in season.episodes %}
-				<div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center mt-3 overflow-hidden">
-					<div class="card-body text-center p-0">
-						<a href="{{ path('show_episode', {'serie': serie.id, 'season': season.id, 'episode': episodes.id}) }}">
-                            <p>Episode {{episodes.number}} : {{episodes.title}}</p>
-						</a>
-					</div>
+				<div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center mt-3">
+					<a class="btn btn-outline-light w-100" href="{{ path('show_episode', {'serie': serie.id, 'season': season.id, 'episode': episodes.id}) }}">
+						<p class="text-center m-0">Episode {{episodes.number}}</p>
+					</a>
 				</div>
 			{% endfor %}
 		</div>
-        <p>Il y a {{ season.episodes|length }} épisodes dans la saison {{ season.number }} de {{ serie.title }}</p>
 </div>
 
 

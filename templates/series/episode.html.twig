@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Épisode {{ episode.title }}
+{% block title %}Épisode
+	{{ episode.title }}
 {% endblock %}
 {% block main %}
+	<div class="container white mt-5">
+		{% include 'series/_serie_card.html.twig' with {series: serie} %}
 
-Titre de la série {{ serie.title }} <!-- titre de la série -->
-Saison numéro : {{ season.number }}
-Épisode {{ episode.number }} : {{ episode.title }}
-
-Date de sortie de l'épisode {{ episode.date }}
-
-IMDB : {{ episode.imdb }}
-
-IMDB Rating : {{ episode.imdbrating }}
+		<div class="row">
+			<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Episode {{episode.number}} : {{episode.title}} ({{ episode.date }})</h2>
+            <div class="me-3">
+                <a class="btn btn-outline-dark" href="{{ path("episode_imdb", {"id": episode.id}) }}" role="button">
+                    <i class="bi bi-film yellow"></i>
+                    <p class="m-0 yellow rating fw-bold d-inline">IMDB Episode {{episode.number}} :  {{ episode.imdbrating }}/10</p>
+                </a>
+            </div>
+		</div>
+	</div>
 
 
 {% endblock %}
