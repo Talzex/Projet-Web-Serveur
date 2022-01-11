@@ -63,26 +63,15 @@ tbody td {
         margin-right: 10px;
 }
 
-.test{
-    border: none !important;
-    border-bottom: 1px solid white !important;
-    padding: 0 !important;
+.note{
     background-color: #222f3e !important;
-    border-radius: 0 !important;
     width: 20px !important;
-    display: inline !important;
-    color: white !important;
-    text-align: center !important;
 }
 
-.test:hover{
+.note:hover{
     border-bottom: 1px solid rgb(206, 206, 206) !important;
 }
 
-.test:focus{
+.note:focus{
     box-shadow: none !important;
-}
-
-.red{
-    color: rgb(255, 44, 44);
 }

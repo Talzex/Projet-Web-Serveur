@@ -4,7 +4,7 @@
 {% endblock %}
 {% block main %}
 	<div class="container white mt-5">
-	
+
 		{% include 'series/_serie_card.html.twig' %}
 		<div class="row">
 			<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Liste des saisons</h2>
@@ -47,9 +47,9 @@
 					</div>
 				</div>
 				<div class="col-lg-1 col-2 my-2">
-					Note : 
+					Note :
 					{{ form_widget(ratingForm.value,{
-					'attr' : {'class': 'form-control test', 'maxlength': '2'}
+					'attr' : {'class': 'note border-0 border-bottom border-white p-0 d-inline white text-center', 'maxlength': '2'}
 				}) }}/10
 
 					<small>{{ form_help(ratingForm.value) }}</small>
@@ -65,20 +65,24 @@
 
 		<div class="row">
 			{% for rating in series.ratings %}
-				<div class="col-lg-2 col-md-3 col-5 text-center commentaire rounded mx-3 my-3 py-3">
-					<div class="yellow d-inline-block">
-						{{ rating.user }} <span class="red">{{ rating.value }}/10</span>
+				<div class="col-lg-2 col-md-3 col-5 text-center commentaire rounded mx-3 my-3 py-3 px-0">
+					<div>
+						<p class="yellow m-0">{{ rating.user }}</p>
 					</div>
-					<div class="d-inline-block">
-						{{ rating.comment }}
-					</div class="d-inline-block">		 
-					{{ rating.date }}
+					<p class="red m-0">{{ rating.value }}/10</p>
+					<div class="pb-2">
+						<p class="m-0">{{ rating.comment }}</p>
+					</div>
+					<div class="border-top pt-2">
+						<p class="m-0">{{ rating.date }}</p>
+					</div>
+
 				</div>
 			{% endfor %}
 
 		</div>
 	</div>
-	
+
 	<a href="{{ path('series_index') }}">back to list</a>
 	<a href="{{ path('series_edit', {'id': series.id}) }}">edit</a>
 	{{ include('series/_delete_form.html.twig') }}
