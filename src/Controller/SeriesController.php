@@ -126,6 +126,13 @@ class SeriesController extends AbstractController
         return $this->redirect('https://www.imdb.com/title/' . $series_url);
     }
 
+    #[Route('/view/{id}/imdb_episode', name: 'episode_imdb', methods: ['GET'])]
+    public function imdb_episode(Episode $episode): Response
+    {
+        $episode_url = $episode->getImdb();
+        return $this->redirect('https://www.imdb.com/title/' . $episode_url);
+    }
+
 
     #[Route('/{id}/edit', name: 'series_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Series $series, EntityManagerInterface $entityManager): Response
