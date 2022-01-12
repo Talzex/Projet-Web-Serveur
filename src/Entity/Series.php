@@ -477,8 +477,6 @@ class Series
             }
         }
 
-        
-
         return $this;
     }
 

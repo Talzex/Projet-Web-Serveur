@@ -35,7 +35,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/series/follow, roles: ROLE_USER }
-        - { path: ^/series/watch, roles: ROLE_USER }
+        - { path: ^/series/follow, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/series/watch, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/series/admin, roles: ROLE_ADMIN }

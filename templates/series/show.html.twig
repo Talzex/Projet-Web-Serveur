@@ -78,7 +78,14 @@
 						<p class="m-0">{{ rating.comment }}</p>
 					</div>
 					<div class="border-top pt-2">
-						<p class="m-0">{{ rating.date }}</p>
+						<p class="m-0">
+							{{ rating.date }}
+							{% if is_granted('ROLE_ADMIN') %}
+							<a href="{{ path('delete_rating', {'id': rating.id}) }}">
+								<i class="bi bi-trash-fill"></i>
+							</a>
+							{% endif %}
+						</p>
 					</div>
 
 				</div>

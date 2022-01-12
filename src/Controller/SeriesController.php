@@ -114,9 +114,10 @@ class SeriesController extends AbstractController
             if (!$isRated) {
                 $rating->setSeries($serie);
                 $rating->setUser($user);
-                $entityManager->persist($rating);
-                $entityManager->flush();
+                $serie->addRating($rating);
             }
+            $entityManager->persist($rating);
+            $entityManager->flush();
         }
 
         return $this->render('series/show.html.twig', [
@@ -208,16 +209,16 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/follow/{id}', name: 'follow_serie', methods: ['GET'])]
-    public function followSerie(Series $series, EntityManagerInterface $manager): Response
+    public function followSerie(Series $serie, EntityManagerInterface $manager): Response
     {
         /** @var User */
         $user = $this->getUser();
         dump($user);
         if ($user != NULL) {
-            $user->followToggle($series);
+            $user->followToggle($serie);
             $manager->flush();
         }
-        return $this->redirectToRoute('series_show', ['id' => $series->getId()]);
+        return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
     }
 
     #[Route('/following', name: 'user_series', methods: ['GET'])]
@@ -247,6 +248,16 @@ class SeriesController extends AbstractController
             $serie->toggleFullyWatched($user);
             $manager->flush();
         }
+
+        return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
+    }
+
+    #[Route('/deleteRating/{id}', name: 'delete_rating', methods: ['GET'])]
+    public function deleteRating(Rating $rating, EntityManagerInterface $manager): Response
+    {
+        $serie = $rating->getSeries();
+        $serie->removeRating($rating);
+        $manager->flush();
 
         return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
     }
