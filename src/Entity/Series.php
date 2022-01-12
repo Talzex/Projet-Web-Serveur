@@ -466,4 +466,38 @@ class Series
 
         return $this;
     }
+
+    public function setFullyWatched(User $user): self
+    {
+        $isFullyWatched = $this->isFullyWatched($user);
+        $seasons = $this->getSeasons();
+        foreach($seasons as $s){
+            foreach($s->getEpisodes() as $e){
+                $isFullyWatched ? $user->removeEpisode($e) : $user->addEpisode($e);
+            }
+        }
+
+        
+
+        return $this;
+    }
+
+    public function isFullyWatched(User $user)
+    {
+        $isWatched = false;
+
+        $seasons = $this->getSeasons();
+        $episodes = new ArrayCollection();
+        foreach($seasons as $s){
+            foreach($s->getEpisodes() as $e){
+                $episodes->add($e);
+            }
+        }
+        $compare = array_diff($episodes->toArray(), $user->getEpisode()->toArray());
+        if (empty($compare)){
+            $isWatched = true;
+        }
+
+        return $isWatched;
+    }
 }

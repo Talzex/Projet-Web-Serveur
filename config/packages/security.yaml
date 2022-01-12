@@ -36,5 +36,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/series/follow, roles: ROLE_USER }
+        - { path: ^/series/watch, roles: ROLE_USER }
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/series/admin, roles: ROLE_ADMIN }
