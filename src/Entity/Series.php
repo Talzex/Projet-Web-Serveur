@@ -467,7 +467,7 @@ class Series
         return $this;
     }
 
-    public function setFullyWatched(User $user): self
+    public function toggleFullyWatched(User $user): self
     {
         $isFullyWatched = $this->isFullyWatched($user);
         $seasons = $this->getSeasons();

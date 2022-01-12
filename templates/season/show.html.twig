@@ -1,0 +1,42 @@
+{% extends 'base.html.twig'%}
+
+{% block title %}Saisons de {{ serie.title }}
+{% endblock %}
+{% block main %}
+<div class="container white mt-5">
+    {% include 'series/_serie_card.html.twig' with {series: serie} %}
+
+    <div class="row">
+        <!-- Mieux mettre en forme le h2 ci-dessous (lien en blanc + mise en forme) -->
+            <h2>Saison {{ season.number }} de <a href="{{ path('series_show', {'id': serie.id}) }}">{{ serie.title }}</a> ({{ season.episodes|length }} épisodes)</h2>
+			<div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
+                <div class="d-flex align-items-center">
+                    <div class="ms-3">
+                        Saison vue ?
+                        <a href="{{ path("watch_season", {"id": season.id}) }}">
+                            {% if app.user %}
+                                {% if is_serie_watched == true %}
+                                    <i class="bi bi-eye-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-eye"></i>
+                                {% endif %}
+                            {% else %}
+                                <i class="bi bi-eye"></i>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Liste des épisodes</h2>
+			{% for episodes in season.episodes %}
+				<div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center mt-3">
+					<a class="btn btn-outline-light w-100" href="{{ path('episode_show', {'id': episodes.id}) }}">
+						<p class="text-center m-0">Episode {{episodes.number}}</p>
+					</a>
+				</div>
+			{% endfor %}
+		</div>
+</div>
+
+
+{% endblock %}

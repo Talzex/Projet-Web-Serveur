@@ -113,4 +113,29 @@ class Season
         return $this;
     }
 
+    public function toggleFullyWatched(User $user): self
+    {
+        $isFullyWatched = $this->isFullyWatched($user);
+        foreach($this->getEpisodes() as $e){
+            $isFullyWatched ? $user->removeEpisode($e) : $user->addEpisode($e);
+        }
+        return $this;
+    }
+
+    public function isFullyWatched(User $user)
+    {
+        $isFullyWatched = false;
+
+        $episodes = new ArrayCollection();
+        foreach($this->getEpisodes() as $e){
+            $episodes->add($e);
+        }
+        $compare = array_diff($episodes->toArray(), $user->getEpisode()->toArray());
+        if (empty($compare)){
+            $isFullyWatched = true;
+        }
+
+        return $isFullyWatched;
+    }
+
 }

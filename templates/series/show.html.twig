@@ -10,13 +10,18 @@
 			{% for season in series.seasons %}
 				<div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center mt-3 overflow-hidden">
 					<div class="card-body overflow-hidden text-center p-0">
-						<a href="{{ path('show_season', {'serie': series.id ,'season': season.id}) }}">
+						<a href="{{ path('season_show', {'id': season.id}) }}">
 							<img class="rounded poster" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster">
 						</a>
 					</div>
 					<div class="card-footer border-0 bg-transparent text-center">
 						<h5 class="card-text m-0">Saison
 							{{ season.number }}
+							{% if season in seasons_watched %}
+								<i class="bi bi-patch-check-fill"></i>
+							{% else %}
+							<i class="bi bi-patch-check"></i>
+							{% endif %}
 						</h5>
 						<h6>{{ season.episodes|length }}
 							épisodes

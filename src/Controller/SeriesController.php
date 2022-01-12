@@ -84,6 +84,7 @@ class SeriesController extends AbstractController
         $rating = new Rating;
         $submitText = "Envoyer";
         $isSerieFullyWatched = false;
+        $seasonWatched = [];
         
         if ($user != NULL) {
             if ($ratingRepository->isRated($user, $serie)) {
@@ -93,8 +94,12 @@ class SeriesController extends AbstractController
 
             // Série vue/non vue
             $isSerieFullyWatched = $serie->isFullyWatched($user);
+            foreach($serie->getSeasons() as $s){
+                if($s->isFullyWatched($user)){
+                    array_push($seasonWatched, $s);
+                }
+            }
         }
-
         $ratingForm = $this->createForm(RatingType::class, $rating, [
             'label' => $submitText,
         ]);
@@ -117,7 +122,8 @@ class SeriesController extends AbstractController
         return $this->render('series/show.html.twig', [
             'series' => $serie,
             'ratingForm' => $ratingForm->createView(),
-            'is_watched' => $isSerieFullyWatched
+            'is_serie_watched' => $isSerieFullyWatched,
+            'seasons_watched' => $seasonWatched
         ]);
     }
     #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
@@ -231,31 +237,16 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/watch/{id}', name: 'watched_serie', methods: ['GET'])]
+    #[Route('/watch/{id}', name: 'watch_serie', methods: ['GET'])]
     public function watchSerie(Request $request, Series $serie, EntityManagerInterface $manager): Response
     {
         /** @var User */
         $user = $this->getUser();
 
         if($user != NULL){
-
-            $isSerieFullyWatched = false;
-
-            $seasons = $serie->getSeasons();
-            $episodes = new ArrayCollection();
-            foreach($seasons as $s){
-                foreach($s->getEpisodes() as $e){
-                    $episodes->add($e);
-                }
-            }
-            $compare = array_diff($episodes->toArray(), $user->getEpisode()->toArray());
-            if (empty($compare)){
-                $isWatched = true;
-            }
-
-            $serie->setFullyWatched($user);
+            $serie->toggleFullyWatched($user);
+            $manager->flush();
         }
-        $manager->flush();
 
         return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
     }

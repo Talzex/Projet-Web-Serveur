@@ -65,9 +65,9 @@
                 </a>
             </div>
             <div class="ms-3">
-                <a href="{{ path("watched_serie", {"id": series.id}) }}">
+                <a href="{{ path("watch_serie", {"id": series.id}) }}">
                     {% if app.user %}
-                        {% if is_watched == true %}
+                        {% if is_serie_watched == true %}
                                 <i class="bi bi-eye-fill"></i>
                         {% else %}
                             <i class="bi bi-eye"></i>

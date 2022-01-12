@@ -5,9 +5,29 @@
 {% endblock %}
 {% block main %}
 	<div class="container white mt-5">
-		{% include 'season/show.html.twig' with {season: season} %}
+		{% include 'series/_serie_card.html.twig' with {series: serie} %}
 		<div class="row">
 			<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Episode {{episode.number}} : {{episode.title}} ({{ episode.date }})</h2>
+            <!-- Bloc pour vue/non-vue -->
+            <div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
+                <div class="d-flex align-items-center">
+                    <div class="ms-3">
+                        Épisode vu ?
+                        <a href="{{ path("watch_episode", {"id": episode.id}) }}">
+                            {% if app.user %}
+                                {% if is_episode_watched == true %}
+                                    <i class="bi bi-eye-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-eye"></i>
+                                {% endif %}
+                            {% else %}
+                                <i class="bi bi-eye"></i>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="me-3">
                 <a class="btn btn-outline-dark" href="{{ path("episode_imdb", {"id": episode.id}) }}" role="button">
                     <i class="bi bi-film yellow"></i>

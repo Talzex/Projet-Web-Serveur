@@ -59,7 +59,7 @@ class Episode
     private $number;
 
     /**
-     * @var \Season
+     * @var \Season|null
      *
      * @ORM\ManyToOne(targetEntity="Season", inversedBy="episodes")
      * @ORM\JoinColumns({
@@ -191,5 +191,16 @@ class Episode
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function isFullyWatched(User $user)
+    {
+        return in_array($this, $user->getEpisode()->toArray());
+    }
+
+    public function toggleFullyWatched(User $user): self
+    {
+        $this->isFullyWatched($user) ? $this->removeUser($user) : $this->addUser($user);
+        return $this;
     }
 }
