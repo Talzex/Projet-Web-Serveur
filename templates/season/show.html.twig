@@ -10,7 +10,7 @@
             <h2 class="ps-0 w-auto">Saison {{ season.number }} de <a class="white text-decoration-none link-series" href="{{ path('series_show', {'id': serie.id}) }}">{{ serie.title }}</a> ({{ season.episodes|length }} épisodes)</h2>
             <a class="w-auto" href="{{ path("watch_season", {"id": season.id}) }}">
                 {% if app.user %}
-                    {% if is_serie_watched == true %}
+                    {% if is_season_watched == true %}
                         <i class="bi bi-eye-fill white  fs-2"></i>
                     {% else %}
                         <i class="bi bi-eye white  fs-2"></i>
