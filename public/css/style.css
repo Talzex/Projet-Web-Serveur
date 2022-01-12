@@ -102,3 +102,7 @@ tbody td {
 .note:focus{
     box-shadow: none !important;
 }
+
+.link-series:hover{
+    color: var(--bs-yellow) !important;
+}
