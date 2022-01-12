@@ -1,3 +1,4 @@
+{% set route = app.request.attributes.get('_route') %}
 <!DOCTYPE html>
 <html>
 	<head>
@@ -35,27 +36,27 @@
 					<h2 class="text-light">SuperSeries</h2>
 					<ul class="navbar-nav ms-4 ps-2 border-2 border-start">
 						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="{{ path('default') }}">Accueil</a>
+							<a class="nav-link {% if route == "default" %}active{% endif %}" aria-current="page" href="{{ path('default') }}">Accueil</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('series_index') }}">S&eacute;ries</a>
+							<a class="nav-link {% if route == "series_index" %}active{% endif %}" href="{{ path('series_index') }}">S&eacute;ries</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('apropos') }}">A propos</a>
+							<a class="nav-link {% if route == "apropos" %}active{% endif %}" href="{{ path('apropos') }}">A propos</a>
 						</li>
 						{% if app.user %}
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('user_series') }}">Mes séries</a>
+							<a class="nav-link {% if route == "user_series" %}active{% endif %}" href="{{ path('user_series') }}">Mes séries</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{ path('app_logout') }}">D&eacute;connexion</a>
 						</li>
 						{% else %}
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+							<a class="nav-link {% if route == "app_register" %}active{% endif %}" href="{{ path('app_register') }}">Inscription</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+							<a class="nav-link {% if route == "app_login" %}active{% endif %}" href="{{ path('app_login') }}">Connexion</a>
 						</li>
 						{% endif %}
 						
