@@ -34,12 +34,39 @@ tbody td {
     height: 300px;
     transition: all .3s ease-in-out;
 }
-.poster:hover{
+
+.poster-container{
+    position: relative;
+}
+
+.play{
+    position:absolute;
+    opacity: 0;
+    top:20%; 
+    margin:0 auto; 
+    left:0px;
+    right:0px;
+    z-index:100;
+    transition: all 1s;
+    color: white;
+}
+
+.poster-container:hover .play{
+    opacity:1; 
+    cursor:pointer;
+    font-size: 4rem;
+    transform: translateY(-50%);
+}
+
+.poster-container:hover .poster{
     opacity: .3;
     filter: blur(3px);
     transform: scale(1.2);
     cursor: pointer;
 }
+
+
+
 .rating{
     font-size: .75rem;
 }
