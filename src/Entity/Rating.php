@@ -46,7 +46,7 @@ class Rating
     private $date;
 
     /**
-     * @var \Series
+     * @var \Series|null
      *
      * @ORM\ManyToOne(targetEntity="Series", inversedBy="ratings")
      * @ORM\JoinColumns({
@@ -56,7 +56,7 @@ class Rating
     private $series;
 
     /**
-     * @var \User
+     * @var \User|null
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({

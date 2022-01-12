@@ -69,15 +69,15 @@
 
 		<div class="row">
 			{% for rating in series.ratings %}
-				<div class="col-lg-2 col-md-3 col-5 text-center commentaire rounded mx-3 my-3 py-3 px-0">
-					<div>
-						<p class="yellow m-0">{{ rating.user }}</p>
+				<div class="col-lg-2 col-md-3 col-5 text-center commentaire rounded mx-3 my-3 px-0">
+					<div class="pt-3 py-2 border-bottom pt-2">
+						<p class="yellow m-0 fw-bold">{{ rating.user }}</p>
+						<p class="red m-0 fw-bold">{{ rating.value }}/10</p>
 					</div>
-					<p class="red m-0">{{ rating.value }}/10</p>
-					<div class="pb-2">
+					<div class="py-2 mx-2">
 						<p class="m-0">{{ rating.comment }}</p>
 					</div>
-					<div class="border-top pt-2">
+					<div class="border-top pt-2 bg-dark py-2">
 						<p class="m-0">
 							{{ rating.date }}
 							{% if is_granted('ROLE_ADMIN') %}
