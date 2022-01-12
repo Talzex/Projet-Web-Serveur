@@ -37,5 +37,7 @@ security:
     access_control:
         - { path: ^/series/follow, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/series/watch, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/season/watch, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: ^/episode/watch, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/series/admin, roles: ROLE_ADMIN }

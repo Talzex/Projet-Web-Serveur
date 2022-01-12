@@ -31,8 +31,9 @@
 			{% endfor %}
 		</div>
 		<div class="row">
+			<h2 class="border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Commentaires :</h2>
 			{% if app.user %}
-				<h2 class="border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Laisser un commentaire</h2>
+				<h3 class="mt-5 ms-2 pb-3 ps-0">Laisser un commentaire</h3>
 				{{ form_start(ratingForm,{
                 'attr' : {'class': 'd-flex flex-wrap col-12 flex-column'}
             }) }}
@@ -93,8 +94,4 @@
 
 		</div>
 	</div>
-
-	<a href="{{ path('series_index') }}">back to list</a>
-	<a href="{{ path('series_edit', {'id': series.id}) }}">edit</a>
-	{{ include('series/_delete_form.html.twig') }}
 {% endblock %}

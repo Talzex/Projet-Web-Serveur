@@ -1,10 +1,10 @@
 <div class="row">
         <div class="col-lg-3 col-md-12 col-12 text-center">
-            <img class="rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="300px" width="200px">
+            <a href="{{path('series_show', {'id': series.id})}}"><img class="rounded" src="{{ path("series_poster", {"id": series.id}) }}" alt="Poster" height="300px" width="200px"></a>
         </div>
         <div class="col-lg-9 col-md-12 col-12">
             <div class="title">
-                <h2>{{ series.title }}</h2>
+                <a class="text-decoration-none text-light" href="{{path('series_show', {'id': series.id})}}"><h2>{{ series.title }}</h2></a>
             </div>
             <div class="tags">
                 <span>
