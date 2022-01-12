@@ -6,36 +6,32 @@
 {% block main %}
 	<div class="container white mt-5">
 		{% include 'series/_serie_card.html.twig' with {series: serie} %}
-		<div class="row">
-			<h2 class="liste-saisons-header border-bottom border-secondary mt-5 ms-2 pb-3 ps-0">Episode {{episode.number}} : {{episode.title}} ({{ episode.date }})</h2>
-            <!-- Bloc pour vue/non-vue -->
-            <div class="d-flex justify-content-between align-content-center mt-3 external-link p-3 rounded">
-                <div class="d-flex align-items-center">
-                    <div class="ms-3">
-                        Épisode vu ?
-                        <a href="{{ path("watch_episode", {"id": episode.id}) }}">
-                            {% if app.user %}
-                                {% if is_episode_watched == true %}
-                                    <i class="bi bi-eye-fill"></i>
-                                {% else %}
-                                    <i class="bi bi-eye"></i>
-                                {% endif %}
-                            {% else %}
-                                <i class="bi bi-eye"></i>
-                            {% endif %}
-                        </a>
-                    </div>
-                </div>
+		<div class="row liste-saisons-header border-bottom border-secondary mt-5 pb-3 justify-content-between align-items-center">
+            <h2 class="ps-0 w-auto">Episode {{episode.number}} : {{episode.title}} ({{ episode.date }})</h2>
+            <a class="w-auto" href="{{ path("watch_episode", {"id": episode.id}) }}">
+                {% if app.user %}
+                    {% if is_episode_watched == true %}
+                        <i class="bi bi-eye-fill white  fs-2"></i>
+                    {% else %}
+                        <i class="bi bi-eye white  fs-2"></i>
+                    {% endif %}
+                {% else %}
+                    <i class="bi bi-eye white  fs-2"></i>
+                {% endif %}
+            </a>
+        </div>
+		<div class="row mt-5 justify-content-center">
+            <a class="btn btn-outline-dark w-auto mb-3" href="{{ path("episode_imdb", {"id": episode.id}) }}" role="button">
+                <i class="bi bi-film yellow"></i>
+                <p class="m-0 yellow rating fw-bold d-inline">IMDB Episode {{episode.number}} :  {{ episode.imdbrating }}/10</p>
+            </a>
+            <div class="ratio ratio-21x9">
+                {% set ytLink = serie.youtubeTrailer | split('v=') %}
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ serie.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-
-            <div class="me-3">
-                <a class="btn btn-outline-dark" href="{{ path("episode_imdb", {"id": episode.id}) }}" role="button">
-                    <i class="bi bi-film yellow"></i>
-                    <p class="m-0 yellow rating fw-bold d-inline">IMDB Episode {{episode.number}} :  {{ episode.imdbrating }}/10</p>
-                </a>
-				{% set ytLink = serie.youtubeTrailer | split('v=') %}
-				<iframe width="560" height="315" src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ serie.title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-		</div>
+				
+        </div>
+            
+		
 	</div>
 {% endblock %}
