@@ -253,12 +253,9 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/deleteRating/{id}', name: 'delete_rating', methods: ['GET'])]
-    public function deleteRating(Rating $rating, EntityManagerInterface $manager): Response
+    public function deleteRating(Rating $rating, RatingRepository $rr, EntityManagerInterface $entityManager): Response
     {
-        $serie = $rating->getSeries();
-        $serie->removeRating($rating);
-        $manager->flush();
-
-        return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
+        $rr->deleteRating($rating);
+        return $this->redirectToRoute('series_show', ['id' => $rating->getSeries()->getId()]);
     }
 }

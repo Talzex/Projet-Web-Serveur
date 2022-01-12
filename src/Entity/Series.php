@@ -447,7 +447,7 @@ class Series
 
     public function addRating(Rating $rating): self
     {
-        if (!$this->ratings->contains($rating)) {
+        if (!$this->getRatings()->contains($rating)) {
             $this->ratings[] = $rating;
             $rating->setSeries($this);
         }
@@ -457,7 +457,7 @@ class Series
 
     public function removeRating(Rating $rating): self
     {
-        if ($this->ratings->removeElement($rating)) {
+        if ($this->getRatings()->removeElement($rating)) {
             // set the owning side to null (unless already changed)
             if ($rating->getSeries() === $this) {
                 $rating->setSeries(null);
