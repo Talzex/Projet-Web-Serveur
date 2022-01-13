@@ -1,3 +1,7 @@
+body {
+    color: var(--bs-white);
+}
+
 .white{
     color: var(--bs-white);
 }
@@ -47,7 +51,7 @@ tbody td {
     left:0px;
     right:0px;
     z-index:100;
-    transition: all 1s;
+    transition: all .5s;
     color: white;
 }
 

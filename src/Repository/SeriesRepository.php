@@ -43,7 +43,7 @@ class SeriesRepository extends ServiceEntityRepository
         return $this->paginate($query, $currentPage);
     }
 
-    public function getRandomSeries($genre, $limit = 6){
+    public function getRandomSeries($genre, $limit = 4){
         return $this->createQueryBuilder('s')
         ->select('s, r')
         ->join('s.externalRating', 'r')
