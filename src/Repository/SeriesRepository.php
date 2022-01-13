@@ -44,17 +44,16 @@ class SeriesRepository extends ServiceEntityRepository
     }
 
     public function getRandomSeries($genre, $limit = 6){
-        $query = $this->createQueryBuilder('s')
+        return $this->createQueryBuilder('s')
         ->select('s, r')
         ->join('s.externalRating', 'r')
         ->join('s.genre', 'g')
         ->where('g.name = :genre')
         ->setParameter('genre', $genre)
+        ->setFirstResult(2) // demander
         ->setMaxResults($limit)
         ->getQuery()
         ->getResult();
-
-        return $query;
     }
 
     public function paginate($dql, $page = 1, $limit = 24)

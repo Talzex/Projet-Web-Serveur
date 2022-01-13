@@ -12,11 +12,12 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'default')]
     public function index(SeriesRepository $sr): Response
     {
-        $genres = ['Fantasy', 'Action', 'Horror', 'Crime'];
+        $genres = ['Sci-Fi', 'Action', 'Fantasy'];
         $series = [];
         foreach($genres as $genre){
-            $series[$genre] = $sr->getRandomSeries($genre, 6);
+            $series[$genre] = $sr->getRandomSeries($genre);
         }
+        
         return $this->render('default/index.html.twig', [
             'seriesList' => $series,
         ]);
