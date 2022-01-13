@@ -56,6 +56,22 @@ class SeriesRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function getSeriesByRatings($sort, $currentPage = 1){
+        $query = $this->createQueryBuilder('s')
+            ->select('s, r')
+            ->leftJoin('s.ratings', 'r')
+            ;
+            if($sort != NULL){
+                $query->orderBy('avg(r.value)', 'DESC');
+                $query->addOrderBy('s.title', 'ASC');
+        } else {
+            $query->orderBy('s.title', 'ASC');
+        }
+        $query->getQuery();
+
+        return $this->paginate($query, $currentPage);
+    }
+
     public function paginate($dql, $page = 1, $limit = 24)
     {
         $paginator = new Paginator($dql);

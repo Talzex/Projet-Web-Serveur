@@ -3,7 +3,10 @@
 {% endblock %}
 {% block main %}
 	<h1 class="text-white text-center">Listes des séries{% if route == "user_series" %} que vous suivez{% endif %}</h1>
-	<div class="container">
+	{% if app.user %}
+		<a href="{{ path('series_index', {'sort': 'ASC'}) }}"><i class="bi bi-sort-numeric-down text-white"></i></a>
+	{% endif %}
+		<div class="container">
 		<div class="row justify-content-center justify-content-md-evenly">
 			{% for series in series %}
 				<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-auto py-3 text-center">

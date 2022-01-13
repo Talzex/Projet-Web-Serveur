@@ -34,9 +34,14 @@ class SeriesController extends AbstractController
     #[Route('/', name: 'series_index', methods: ['GET'])]
     public function index(Request $request, SeriesRepository $seriesRepo): Response
     {
+        $sort = $request->query->get('sort') != NULL ? $request->query->get('sort') : NULL;
         $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
         $query = NULL;
-        $series = $seriesRepo->getSeries($numPage);
+        if($sort != NULL){
+            $series = $seriesRepo->getSeriesByRatings($sort, $numPage);
+        } else {
+            $series = $seriesRepo->getSeries($numPage);
+        }
         if($request){
             $searchRequest = $request->query->all();
             if($searchRequest != NULL && $request->query->get('query') != NULL){
@@ -44,7 +49,6 @@ class SeriesController extends AbstractController
                 $series = $seriesRepo->getSeriesByName($query, $numPage);
             }
         }
-
         $totalSeries = $series->count();
         $maxPages = ceil($totalSeries / 24);
         
