@@ -31,6 +31,31 @@ class SeriesRepository extends ServiceEntityRepository
 
         return $this->paginate($query, $currentPage);
     }
+    
+    public function getSeriesByName(string $search, $currentPage = 1)
+    {
+        $query = $this->createQueryBuilder('s')
+        ->where('s.title LIKE :search')
+        ->setParameter('search', '%' . $search . '%')
+        ->orderBy('s.title', 'ASC')
+        ->getQuery();
+
+        return $this->paginate($query, $currentPage);
+    }
+
+    public function getRandomSeries($genre, $limit = 6){
+        $query = $this->createQueryBuilder('s')
+        ->select('s, r')
+        ->join('s.externalRating', 'r')
+        ->join('s.genre', 'g')
+        ->where('g.name = :genre')
+        ->setParameter('genre', $genre)
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getResult();
+
+        return $query;
+    }
 
     public function paginate($dql, $page = 1, $limit = 24)
     {
@@ -43,14 +68,4 @@ class SeriesRepository extends ServiceEntityRepository
         return $paginator;
     }
 
-    public function getSeriesByName(string $search, $currentPage = 1)
-    {
-        $query = $this->createQueryBuilder('s')
-        ->where('s.title LIKE :search')
-        ->setParameter('search', '%' . $search . '%')
-        ->orderBy('s.title', 'ASC')
-        ->getQuery();
-
-        return $this->paginate($query, $currentPage);
-    }
 }
