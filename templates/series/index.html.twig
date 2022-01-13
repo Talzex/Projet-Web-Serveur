@@ -2,7 +2,7 @@
 {% block title %}Series
 {% endblock %}
 {% block main %}
-	<h1 class="text-white text-center">Listes des séries{% if app.user %} que vous suivez{% endif %}</h1>
+	<h1 class="text-white text-center">Listes des séries{% if route == "user_series" %} que vous suivez{% endif %}</h1>
 	<div class="container">
 		<div class="row justify-content-center justify-content-md-evenly">
 			{% for series in series %}
