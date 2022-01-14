@@ -11,6 +11,7 @@ use App\Form\SeriesType;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
 use App\Repository\SeriesRepository;
+use Container5pYjq0X\PaginatorInterface_82dac15;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,40 +24,34 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/series')]
 class SeriesController extends AbstractController
 {
 
     #[Route('/', name: 'series_index', methods: ['GET'])]
-    public function index(Request $request, SeriesRepository $seriesRepo): Response
+    public function index(Request $request, SeriesRepository $seriesRepo, PaginatorInterface $paginator): Response
     {
-        $sort = $request->query->get('sort') != NULL ? $request->query->get('sort') : NULL;
+        $sort = $request->query->get('sort') == 'ASC' ? 'ASC' : 'DESC';
+        $query = $request->query->get('query') != NULL ? $request->query->get('query') : NULL; 
+        
+        $series = $seriesRepo->getSeries($sort, $query);
+        
         $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
-        $query = NULL;
-        if($sort != NULL){
-            $series = $seriesRepo->getSeriesByRatings($sort, $numPage);
-        } else {
-            $series = $seriesRepo->getSeries($numPage);
-        }
-        if($request){
-            $searchRequest = $request->query->all();
-            if($searchRequest != NULL && $request->query->get('query') != NULL){
-                $query = htmlspecialchars($request->query->get('query'));
-                $series = $seriesRepo->getSeriesByName($query, $numPage);
-            }
-        }
-        $totalSeries = $series->count();
-        $maxPages = ceil($totalSeries / 24);
+        $series = $paginator->paginate(
+            $series, // Requête contenant les données à paginer (ici nos articles)
+            $numPage, // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+            24 // Nombre de résultats par page
+        );
+
+        //dump($totalSeries); die;
         
         return $this->render('series/index.html.twig', [
             'series' => $series,
             'query' => $query,
-            'thisPage' => $numPage,
-            'maxPages' =>$maxPages
         ]);
     }
 
@@ -226,19 +221,21 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/following', name: 'user_series', methods: ['GET'])]
-    public function userSeries(Request $request): Response
+    public function userSeries(Request $request, PaginatorInterface $paginator): Response
     {
         /** @var User */
         $user = $this->getUser();
         $series = $user->getSeries() != NULL ? $user->getSeries() : "Vous ne suivez aucune série.";
+        
         $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
-        $totalSeries = $series->count();
-        $maxPages = ceil($totalSeries / 24);
+        $series = $paginator->paginate(
+            $series,
+            $numPage,
+            24
+        );
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
-            'thisPage' => $numPage,
-            'maxPages' =>$maxPages
         ]);
     }
 

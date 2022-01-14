@@ -53,12 +53,19 @@ class SeasonController extends AbstractController
         /** @var User */
         $user = $this->getUser();
         $serie = $season->getSeries();
+        $episodesWatched = [];
 
         $isSerieWatched = false;
         $isSeasonWatched = false;
         if($user != NULL){
             $isSerieWatched = $serie->isFullyWatched($user);
             $isSeasonWatched = $season->isFullyWatched($user);
+
+            foreach($season->getEpisodes() as $e){
+                if($e->isFullyWatched($user)){
+                    array_push($episodesWatched, $e);
+                }
+            }
         }
 
         return $this->render('season/show.html.twig', [
@@ -66,6 +73,7 @@ class SeasonController extends AbstractController
             'season' => $season,
             'is_serie_watched' => $isSerieWatched,
             'is_season_watched' => $isSeasonWatched,
+            'episodes_watched' => $episodesWatched,
         ]);
     }
 

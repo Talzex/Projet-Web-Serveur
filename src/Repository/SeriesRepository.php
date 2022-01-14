@@ -20,27 +20,32 @@ class SeriesRepository extends ServiceEntityRepository
         parent::__construct($registry, Series::class);
     }
 
-    public function getSeries($currentPage = 1)
+    public function getSeries($sort = null, $search = null)
     {
         $query = $this->createQueryBuilder('s')
-            ->select('s, r')
-            ->join('s.externalRating', 'r')
-            ->orderBy('s.title', 'ASC')
+            ->select('s, COALESCE(avg(r.value), 0), er')
+            ->leftjoin('s.externalRating', 'er')
+            ->leftJoin('s.ratings', 'r')
+            ;
+
+            if($search != null){
+                $query->where('s.title LIKE :search')
+                ->setParameter('search', '%' . htmlspecialchars($search) . '%');
+            }
+
+            if($sort != null){
+                $query->orderBy('avg(r.value)', $sort == 'DESC' ? 'DESC' : 'ASC');
+                $query->addOrderBy('s.title', 'ASC');
+            } else {
+                $query->orderBy('s.title', 'ASC');
+            }
+
+            $query->groupBy('s.id')
             ->getQuery()
-        ;
+            ->getResult()
+            ;
 
-        return $this->paginate($query, $currentPage);
-    }
-    
-    public function getSeriesByName(string $search, $currentPage = 1)
-    {
-        $query = $this->createQueryBuilder('s')
-        ->where('s.title LIKE :search')
-        ->setParameter('search', '%' . $search . '%')
-        ->orderBy('s.title', 'ASC')
-        ->getQuery();
-
-        return $this->paginate($query, $currentPage);
+        return $query;
     }
 
     public function getRandomSeries($genre, $limit = 4){
@@ -55,32 +60,4 @@ class SeriesRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
     }
-
-    public function getSeriesByRatings($sort, $currentPage = 1){
-        $query = $this->createQueryBuilder('s')
-            ->select('s, r')
-            ->leftJoin('s.ratings', 'r')
-            ;
-            if($sort != NULL){
-                $query->orderBy('avg(r.value)', 'DESC');
-                $query->addOrderBy('s.title', 'ASC');
-        } else {
-            $query->orderBy('s.title', 'ASC');
-        }
-        $query->getQuery();
-
-        return $this->paginate($query, $currentPage);
-    }
-
-    public function paginate($dql, $page = 1, $limit = 24)
-    {
-        $paginator = new Paginator($dql);
-
-        $paginator->getQuery()
-            ->setFirstResult($limit * ($page - 1)) // Offset
-            ->setMaxResults($limit); // Limit
-
-        return $paginator;
-    }
-
 }
