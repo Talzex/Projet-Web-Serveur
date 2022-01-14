@@ -48,6 +48,18 @@ class SeriesRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function associateRatings($series = []){
+        $query = $this->createQueryBuilder('r')
+            ->select('COALESCE(avg(r.value))')
+            ->from('Rating', 'r')
+            ->where('r.series IN (:series)')
+            ->setParameter('series', $series)
+            ->getQuery()
+            ->getResult();
+        dump($query); die;
+        return null;
+    }
+
     public function getRandomSeries($genre, $limit = 4){
         return $this->createQueryBuilder('s')
         ->select('s, r')

@@ -39,7 +39,7 @@ class SeriesController extends AbstractController
         $query = $request->query->get('query') != NULL ? $request->query->get('query') : NULL; 
         
         $series = $seriesRepo->getSeries($sort, $query);
-        
+
         $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
         $series = $paginator->paginate(
             $series, // Requête contenant les données à paginer (ici nos articles)
@@ -222,13 +222,14 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/following', name: 'user_series', methods: ['GET'])]
-    public function userSeries(Request $request, PaginatorInterface $paginator): Response
+    public function userSeries(Request $request, PaginatorInterface $paginator, SeriesRepository $seriesRepo): Response
     {
+        $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
+        $sort = $request->query->get('s');
         /** @var User */
         $user = $this->getUser();
         $series = $user->getSeries() != NULL ? $user->getSeries() : "Vous ne suivez aucune série.";
-        
-        $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
+
         $series = $paginator->paginate(
             $series,
             $numPage,
@@ -237,6 +238,7 @@ class SeriesController extends AbstractController
 
         return $this->render('series/index.html.twig', [
             'series' => $series,
+            'order' => $sort
         ]);
     }
 

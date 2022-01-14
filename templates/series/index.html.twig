@@ -21,8 +21,13 @@
 		<div class="container">
 		<div class="row justify-content-center justify-content-md-evenly">
 			{% for result in series %}
-				{% set serie = result[0] %}
-				{% set avg = result[1] %}
+				{% if result is iterable %}
+					{% set serie = result[0] %}
+					{% set avg = result[1] %}
+				{% else %}
+					{% set serie = result %}
+					{% set avg = NULL %}
+				{% endif %}
 				<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-auto py-3 text-center">
 					<div class="card bg-transparent text-white p-0 d-inline-flex border-0" style="width: 250px;">
 						<div class="card-body overflow-hidden text-center p-0">
