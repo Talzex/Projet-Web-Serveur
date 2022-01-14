@@ -22,10 +22,11 @@
         </div>
         <div class="row my-5">
             <h3 class="liste-saisons-header mt-3 ms-3 ps-0">Liste des épisodes : </h3>
-			{% for episodes in season.episodes %}
+			{% for episode in season.episodes %}
 				<div class="col-lg-2 col-md-4 col-sm-6 col-12 text-center mt-3">
-					<a class="btn btn-outline-light w-100" href="{{ path('episode_show', {'id': episodes.id}) }}">
-						<p class="text-center m-0">Episode {{episodes.number}}</p>
+					<a class="btn btn-outline-light w-100" href="{{ path('episode_show', {'id': episode.id}) }}">
+						<p class="text-center m-0">Episode {{episode.number}}</p>
+                            <i class="bi bi-patch-check{% if episode in episodes_watched %}-fill{% endif %}"></i>
 					</a>
 				</div>
 			{% endfor %}
