@@ -7,7 +7,7 @@
                 <a class="text-decoration-none text-light" href="{{path('series_show', {'id': series.id})}}"><h2>{{ series.title }}</h2></a>
             </div>
             <div class="tags">
-                <span>
+                <span class="ps-0">
                     {% for genre in series.genre %}
                         {{ genre.name }}
                     {% endfor %}
@@ -17,15 +17,15 @@
                     {{ series.yearStart }}</span>
                 <span class="yellow">{{ series.seasons|length }} Saison{% if series.seasons|length > 1 %}s{% endif %}</span>
             </div>
-            <div class="plot mt-3">
+            <div class="plot mt-3"> 
                 {{ series.plot }}
             </div>
-            <ul class="d-flex flex-wrap list-unstyled mt-3">
+            <ul class="d-flex flex-wrap list-unstyled mt-3 flex-md-row flex-column">
                 <li>
                     <span class="director yellow">Directeur</span>
                     <p class="mt-2">{{ series.director }}</p>
                 </li>
-                <li class="ms-3">
+                <li class="ms-md-3 ms-0">
                     <span class="actor yellow">Actor</span>
                     <p class="mt-2">
                         {% for actors in series.actor %}
@@ -33,7 +33,7 @@
                         {% endfor %}
                     </p>
                 </li>
-                <li class="ms-3">
+                <li class="ms-md-3 ms-0">
                     <span class="awards">
                         <i class="bi bi-award-fill yellow"></i>
                     </span>

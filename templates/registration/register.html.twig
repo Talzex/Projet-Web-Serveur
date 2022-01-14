@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block main %}
-	<div class="container white text-center">
+	<div class="container text-white text-center">
 		<h1>Inscription</h1>
 		<div class="row">
 			{{ form_start(registrationForm,{
@@ -68,6 +68,8 @@
 			</div>
 		</div>
 		{{ form_row(registrationForm.agreeTerms) }}
+
+		{{ form_row(registrationForm.captcha) }}
 
 		<button type="submit" class="btn btn-outline-light my-2">Inscription</button>
 		{{ form_end(registrationForm) }}

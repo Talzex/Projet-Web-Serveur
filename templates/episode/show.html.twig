@@ -4,7 +4,7 @@
 	{{ episode.title }}
 {% endblock %}
 {% block main %}
-	<div class="container white mt-5">
+	<div class="container text-white mt-5">
 		{% include 'series/_serie_card.html.twig' with {series: serie} %}
 		<div class="row liste-saisons-header border-bottom border-secondary mt-5 pb-3 justify-content-between align-items-center">
 			<h2 class="ps-0 w-auto">Episode
@@ -15,12 +15,12 @@
 			<a class="w-auto" href="{{ path("watch_episode", {"id": episode.id}) }}">
 				{% if app.user %}
 					{% if is_episode_watched == true %}
-						<i class="bi bi-eye-fill white  fs-2"></i>
+						<i class="bi bi-eye-fill text-white  fs-2"></i>
 					{% else %}
-						<i class="bi bi-eye white  fs-2"></i>
+						<i class="bi bi-eye text-white  fs-2"></i>
 					{% endif %}
 				{% else %}
-					<i class="bi bi-eye white  fs-2"></i>
+					<i class="bi bi-eye text-white  fs-2"></i>
 				{% endif %}
 			</a>
 		</div>
