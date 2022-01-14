@@ -5,15 +5,15 @@
 	<h1 class="text-white text-center">Listes des séries{% if route == "user_series" %} que vous suivez{% endif %}</h1>
 	{% if app.user %}
 		<div class="text-center text-white">
-		<a class="text-white" href="{{ path('series_index') }}"><i class="bi bi-x-circle"></i></a>
+		<a class="btn btn-outline-light" href="{{ path('series_index') }}"><i class="bi bi-x-circle"></i></a>
 		{% if order == 'ASC' %}
-			<a href="{{ path('series_index', {'s': 'DESC'}) }}"><i class="bi bi-sort-numeric-up text-white"></i></a>
+			<a class="btn btn-outline-light" href="{{ path('series_index', {'s': 'DESC'}) }}"><i class="bi bi-sort-numeric-up"></i></a>
 			<p>Les moins bien notées en premières.</p>
 		{% elseif order == 'DESC' %}
-			<a href="{{ path('series_index', {'s': 'ASC'}) }}"><i class="bi bi-sort-numeric-down text-white"></i></a>
+			<a class="btn btn-outline-light" href="{{ path('series_index', {'s': 'ASC'}) }}"><i class="bi bi-sort-numeric-down "></i></a>
 			<p>Les mieux notées en premières</p>
 		{% else %}
-			<a href="{{ path('series_index', {'s': 'DESC'})}}"><i class="bi bi-sort-numeric-up text-white"></i></a>
+			<a class="btn btn-outline-light" href="{{ path('series_index', {'s': 'DESC'})}}"><i class="bi bi-sort-numeric-up "></i></a>
 			<p>Séries triées par titre</p>
 		{% endif %}
 		</div>
@@ -50,6 +50,9 @@
 				<p class="text-white">Aucune série n'a été trouvée.</p>
 			{% endfor %}
 		</div>
-		{{ knp_pagination_render(series) }}
+		<div class="d-flex justify-content-center">
+			{{ knp_pagination_render(series) }}
+		</div>
+		
 	</div>
 {% endblock %}
