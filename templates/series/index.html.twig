@@ -38,6 +38,9 @@
 				<p class="text-white">Aucune série n'a été trouvée.</p>
 			{% endfor %}
 		</div>
-		{{ knp_pagination_render(series) }}
+		<div class="d-flex justify-content-center">
+			{{ knp_pagination_render(series) }}
+		</div>
+		
 	</div>
 {% endblock %}
