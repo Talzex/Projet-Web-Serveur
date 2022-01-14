@@ -44,7 +44,7 @@ class Season
     /**
      * @var \Episodes
      *
-     * @ORM\OneToMany(targetEntity="Episode", mappedBy="season")
+     * @ORM\OneToMany(targetEntity="Episode", mappedBy="season", cascade={"persist"})
      * @OrderBy({"number" = "ASC"})
      */
     private $episodes;

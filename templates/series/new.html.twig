@@ -5,8 +5,12 @@
 {% block main %}
     <h1>Enregistrer une série dans la base de données</h1>
 
-    <form method="GET" action="{{ path('series_new') }}">
+    <form method="GET" action="{{ path('series_add') }}">
         <input type="text" name="imdb">
         <input type="submit" value="Enregistrer">
     </form>
+
+    {% if error != NULL %}
+        {{ error }}
+    {% endif %}
 {% endblock %}

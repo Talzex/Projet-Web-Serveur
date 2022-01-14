@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Episode;
+use App\Entity\ExternalRatingSource;
+use App\Entity\Genre;
+use App\Entity\Actor;
+use App\Entity\ExternalRating;
 use App\Entity\Season;
 use App\Entity\Series;
 use App\Entity\Rating;
 use App\Entity\User;
+use App\Entity\Episode;
 use App\Form\SeriesType;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
@@ -46,8 +50,6 @@ class SeriesController extends AbstractController
             $numPage, // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
             24 // Nombre de résultats par page
         );
-
-        //dump($totalSeries); die;
         
         return $this->render('series/index.html.twig', [
             'series' => $series,
@@ -56,7 +58,15 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/new', name: 'series_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $em): Response
+    {
+        return $this->renderForm('series/new.html.twig', [
+            'error' => NULL,
+        ]);
+
+    }
+    #[Route('/add', name: 'series_add', methods: ['GET', 'POST'])]
+    public function add(Request $request, EntityManagerInterface $em): Response
     {
         $imdb = $request->query->get('imdb');
         $api_key = '3c98a627';
@@ -65,15 +75,159 @@ class SeriesController extends AbstractController
             'i' => $imdb,
             'apikey' => $api_key,
         ];
-
         
-        $url = 'http://www.omdbapi.com/?' . http_build_query($data);
+        $url = 'http://www.omdbapi.com/?' . http_build_query($data) . '&plot=full';
+        $poster = 'http://img.omdbapi.com/?' . http_build_query($data);
+        
         $response = file_get_contents($url);
-        $response = json_decode($response);
+        $data = json_decode($response, true);
         
-        dump($response); die;
+        //dump($data); die;
 
-        return $this->redirectToRoute('series_index', [], Response::HTTP_SEE_OTHER);
+        $serieExist = $em->getRepository(Series::class)->findOneBy(['imdb' => $imdb]);
+
+        $episodeExist = $em->getRepository(Episode::class)->findOneBy(['imdb' => $imdb]);
+        
+        if($data['Response'] == "True"){
+            if(isset($data['Type']) &&  $data['Type'] == 'series'){
+                if(!$serieExist){
+                    $poster = file_get_contents($data['Poster']);
+
+                    $serie = new Series;
+
+                    $years = explode('–', $data['Year']);
+                    $yearStart = $years[0];
+                    $isYearEnd = strpos($data['Year'], '–');
+                    $actors = explode(', ', $data['Actors']);
+                    $genres = explode(', ', $data['Genre']);
+                    $ratings = $data['Ratings'];
+
+                    $serie->setTitle($data['Title'])
+                        ->setYearStart(intval($yearStart));
+                        if($isYearEnd){
+                            $serie->setYearEnd(intval($years[1]));
+                        } else {
+                            $serie->setYearEnd(NULL);
+                        }
+                    $serie->setPlot($data['Plot'])
+                        ->setImdb($data['imdbID'])
+                        ->setDirector($data['Director'])
+                        ->setAwards($data['Awards'])
+                        ->setPoster($poster);
+                    $em->persist($serie);
+                    $em->flush();
+
+                    /*
+                    if(isset($data['totalSeasons'])){
+                        for($i = 1; $i <= intval($data['totalSeasons']); $i++){
+                            $s = new Season;
+                            $s->setNumber($i)
+                                ->setSeries($serie);
+                            $em->persist($s);
+                            $em->flush();
+                        }
+                    }*/
+                        
+                    foreach($ratings as $rating){
+                        $r = new ExternalRating;
+                        $ratingSource = $em->getRepository(ExternalRatingSource::class)->findOneBy(['name' => $rating['Source']]);
+                        if($ratingSource != NULL){
+                            $rc = $ratingSource;
+                        } else {
+                            $rc = new ExternalRatingSource;
+                            $rc->setName($rating['Source']);
+                            $em->persist($rc);
+                            $em->flush();
+                        }
+                        $r->setSeries($serie)
+                            ->setSource($rc)
+                            ->setValue($rating['Value'])
+                            ->setVotes(intval(trim($data['imdbVotes'], ',')));
+                            $em->persist($r);
+                            $em->flush();
+                    }
+
+                    foreach($actors as $actor){
+                        $a = new Actor;
+                        $a->setName($actor)
+                            ->addSeries($serie);
+                        $serie->addActor($a);
+                        $em->persist($a);
+                        $em->flush();
+                    }
+
+                    foreach($genres as $genre){
+                        $g = new Genre;
+                        $g->setName($genre)
+                            ->addSeries($serie);
+                        $serie->addGenre($g);
+                        $em->persist($r);
+                        $em->flush($r);
+                    }
+
+                    return $this->redirectToRoute('series_show', [
+                        'id' => $serie->getId(),
+                    ], Response::HTTP_SEE_OTHER);
+                } else {
+                    return $this->redirectToRoute('series_new', [
+                        'error' => 'Cette série est déjà dans la base.',
+                    ], Response::HTTP_SEE_OTHER);
+                }
+            } elseif(isset($data['Type']) && $data['Type'] == 'episode'){
+                if(!$episodeExist){
+                    $episode = new Episode;
+                    $episode->setTitle($data['Title'])
+                    ->setImdb($imdb)
+                    ->setImdbrating(floatval($data['imdbRating']))
+                    ->setNumber(intval($data['Episode']));
+
+                    $serie = $em->getRepository(Series::class)->findOneBy(['imdb' => 't' . $data['seriesID']]);
+                    $season = $em->getRepository(Season::class)->findOneBy(['number' => $data['Season'], 'series' => $serie]);
+
+                    if($season == NULL){
+                        $season = new Season;
+                    }
+                    if($serie != NULL){
+                        $season->setSeries($serie);
+                    } else {
+                        return $this->redirectToRoute('series_new', [
+                            'error' => 'Veuillez importer la série avant les épisodes.',
+                        ], Response::HTTP_SEE_OTHER);
+                    }
+
+                    $season->addEpisode($episode)
+                        ->setNumber($data['Season']);
+                    $em->persist($season);
+                    $em->flush();
+                    $episode->setSeason($season);
+                    $date = new \DateTime();
+                    $date->format('Y-m-d');
+                    $episode->setDate($date);
+                    $em->persist($episode);
+                    $em->flush();
+
+                    return $this->redirectToRoute('episode_show', [
+                        'id' => $episode->getId(),
+                    ], Response::HTTP_SEE_OTHER);
+                } else {
+                    return $this->redirectToRoute('series_new', [
+                        'error' => 'Cette épisode est déjà dans la base.',
+                    ], Response::HTTP_SEE_OTHER);
+                }
+            } else {
+                return $this->redirectToRoute('series_new', [
+                    'error' => 'Erreur',
+                ], Response::HTTP_SEE_OTHER);
+            }
+        } else {
+            return $this->redirectToRoute('series_add', [
+                'error' => 'Cette série n\'existe pas.',
+            ], Response::HTTP_SEE_OTHER);
+        }
+        
+        return $this->redirectToRoute('series_new', [
+            'error' => 'Succès',
+        ], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/view/{id}', name: 'series_show', methods: ['GET', 'POST'])]
@@ -131,6 +285,10 @@ class SeriesController extends AbstractController
     public function trailer(Series $series): Response
     {
         $series_url = $series->getYoutubeTrailer();
+        if($series_url == NULL)
+            return $this->redirectToRoute('series_show', [
+                'id' => $series->getId(),
+            ]);
         return $this->redirect($series_url);
     }
 

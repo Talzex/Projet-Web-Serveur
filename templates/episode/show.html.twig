@@ -34,8 +34,12 @@
 						{{ episode.imdbrating }}/10</p>
 				</a>
 				<div class="ratio ratio-16x9">
-					{% set ytLink = serie.youtubeTrailer | split('v=') %}
-					<iframe src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ serie.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					{% if serie.youtubeTrailer | split('v=') == NULL %}
+						{% set ytLink = serie.youtubeTrailer | split('v=') %}
+						<iframe src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ serie.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					{% else %}
+						<p>Pas de trailer trouvé</p>
+					{% endif %}
 				</div>
 			</div>
 		</div>
