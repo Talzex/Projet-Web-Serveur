@@ -59,7 +59,11 @@
 							<a class="nav-link {% if route == "app_login" %}active{% endif %}" href="{{ path('app_login') }}">Connexion</a>
 						</li>
 						{% endif %}
-						
+						{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a class="nav-link {% if route == "add_serie" %}active{% endif %}" href="{{ path('series_new') }}">Ajouter une série</a>
+						</li>
+						{% endif %}
 					</ul>
 					<!-- Formulaire de recherche -->
 					<form method="GET" action="{{ path('series_index') }}" class="d-flex ms-auto">

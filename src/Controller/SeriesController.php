@@ -58,21 +58,22 @@ class SeriesController extends AbstractController
     #[Route('/new', name: 'series_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $series = new Series();
-        $form = $this->createForm(SeriesType::class, $series);
-        $form->handleRequest($request);
+        $imdb = $request->query->get('imdb');
+        $api_key = '3c98a627';
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($series);
-            $entityManager->flush();
+        $data = [
+            'i' => $imdb,
+            'apikey' => $api_key,
+        ];
 
-            return $this->redirectToRoute('series_index', [], Response::HTTP_SEE_OTHER);
-        }
+        
+        $url = 'http://www.omdbapi.com/?' . http_build_query($data);
+        $response = file_get_contents($url);
+        $response = json_decode($response);
+        
+        dump($response); die;
 
-        return $this->renderForm('series/new.html.twig', [
-            'series' => $series,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('series_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/view/{id}', name: 'series_show', methods: ['GET', 'POST'])]
