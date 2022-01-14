@@ -29,9 +29,9 @@ class UserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Command to generate ratings')
-            ->addArgument('ratingNumber', InputArgument::REQUIRED, 'Number of ratings')
-            ->setHelp('This command allows you to generate ratings on all the series...');
+            ->setDescription('Command to generate ratings on each page')
+            ->addArgument('ratingNumber', InputArgument::REQUIRED, 'Number of ratings per page')
+            ->setHelp('This command allows you to generate ratings on each series.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -48,11 +48,23 @@ class UserCommand extends Command
         $userRepo = $em->getRepository(User::class);
         $seriesRepo = $em->getRepository(Series::class);
 
-        $user = $userRepo->findOneBy(['id' => 11]);
-        $series = $seriesRepo->findAll();
-
         $date = new \DateTime();
         $date->format('Y-m-d H:i:s');
+         
+        $user = $userRepo->findOneBy(['userId' => 'FakeRating']);
+        if($user == NULL) {
+            $user = new User;
+            $user->setName('FakeRating')
+                 ->setEmail('fakeEmail@fake.com')
+                 ->setPassword('fakePassword')
+                 ->setRegisterDate($date)
+                 ->setUserId('FakeRating')
+            ;
+            $em->persist($user);
+            $em->flush();
+        }
+        
+        $series = $seriesRepo->findAll();
 
         foreach($series as $serie) {
 
