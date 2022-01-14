@@ -4,7 +4,19 @@
 {% block main %}
 	<h1 class="text-white text-center">Listes des séries{% if route == "user_series" %} que vous suivez{% endif %}</h1>
 	{% if app.user %}
-		<a href="{{ path('series_index', {'sort': 'ASC'}) }}"><i class="bi bi-sort-numeric-down text-white"></i></a>
+		<div class="text-center text-white">
+		<a class="text-white" href="{{ path('series_index') }}"><i class="bi bi-x-circle"></i></a>
+		{% if order == 'ASC' %}
+			<a href="{{ path('series_index', {'s': 'DESC'}) }}"><i class="bi bi-sort-numeric-up text-white"></i></a>
+			<p>Les moins bien notées en premières.</p>
+		{% elseif order == 'DESC' %}
+			<a href="{{ path('series_index', {'s': 'ASC'}) }}"><i class="bi bi-sort-numeric-down text-white"></i></a>
+			<p>Les mieux notées en premières</p>
+		{% else %}
+			<a href="{{ path('series_index', {'s': 'DESC'})}}"><i class="bi bi-sort-numeric-up text-white"></i></a>
+			<p>Séries triées par titre</p>
+		{% endif %}
+		</div>
 	{% endif %}
 		<div class="container">
 		<div class="row justify-content-center justify-content-md-evenly">

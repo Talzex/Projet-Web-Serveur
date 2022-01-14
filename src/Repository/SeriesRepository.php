@@ -34,7 +34,7 @@ class SeriesRepository extends ServiceEntityRepository
             }
 
             if($sort != null){
-                $query->orderBy('avg(r.value)', $sort == 'DESC' ? 'DESC' : 'ASC');
+                $query->orderBy('avg(r.value)', $sort == 'ASC' ? 'ASC' : 'DESC');
                 $query->addOrderBy('s.title', 'ASC');
             } else {
                 $query->orderBy('s.title', 'ASC');

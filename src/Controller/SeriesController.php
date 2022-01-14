@@ -35,7 +35,7 @@ class SeriesController extends AbstractController
     #[Route('/', name: 'series_index', methods: ['GET'])]
     public function index(Request $request, SeriesRepository $seriesRepo, PaginatorInterface $paginator): Response
     {
-        $sort = $request->query->get('sort') == 'ASC' ? 'ASC' : 'DESC';
+        $sort = $request->query->get('s');
         $query = $request->query->get('query') != NULL ? $request->query->get('query') : NULL; 
         
         $series = $seriesRepo->getSeries($sort, $query);
@@ -51,7 +51,7 @@ class SeriesController extends AbstractController
         
         return $this->render('series/index.html.twig', [
             'series' => $series,
-            'query' => $query,
+            'order' => $sort,
         ]);
     }
 
