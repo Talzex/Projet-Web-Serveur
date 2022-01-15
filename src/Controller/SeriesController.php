@@ -169,9 +169,9 @@ class SeriesController extends AbstractController
                         'id' => $serie->getId(),
                     ], Response::HTTP_SEE_OTHER);
                 } else {
-                    return $this->redirectToRoute('series_new', [
+                    return $this->render('series/new.html.twig', [
                         'error' => 'Cette série est déjà dans la base.',
-                    ], Response::HTTP_SEE_OTHER);
+                    ]);
                 }
             } elseif(isset($data['Type']) && $data['Type'] == 'episode'){
                 if(!$episodeExist){
@@ -190,11 +190,11 @@ class SeriesController extends AbstractController
                     if($serie != NULL){
                         $season->setSeries($serie);
                     } else {
-                        return $this->redirectToRoute('series_new', [
+                        return $this->render('series/new.html.twig', [
                             'error' => 'Veuillez importer la série avant les épisodes.',
-                        ], Response::HTTP_SEE_OTHER);
+                        ]);
                     }
-
+    
                     $season->addEpisode($episode)
                         ->setNumber($data['Season']);
                     $em->persist($season);
@@ -210,24 +210,24 @@ class SeriesController extends AbstractController
                         'id' => $episode->getId(),
                     ], Response::HTTP_SEE_OTHER);
                 } else {
-                    return $this->redirectToRoute('series_new', [
+                    return $this->render('series/new.html.twig', [
                         'error' => 'Cette épisode est déjà dans la base.',
-                    ], Response::HTTP_SEE_OTHER);
+                    ]);
                 }
             } else {
-                return $this->redirectToRoute('series_new', [
-                    'error' => 'Erreur',
-                ], Response::HTTP_SEE_OTHER);
+                return $this->render('series/new.html.twig', [
+                    'error' => 'Ce que vous tentez d\'ajouter n\'est pas considéré comme un épisode ou une série.',
+                ]);
             }
         } else {
-            return $this->redirectToRoute('series_add', [
+            return $this->render('series/new.html.twig', [
                 'error' => 'Cette série n\'existe pas.',
-            ], Response::HTTP_SEE_OTHER);
+            ]);
         }
         
-        return $this->redirectToRoute('series_new', [
+        return $this->render('series/new.html.twig', [
             'error' => 'Succès',
-        ], Response::HTTP_SEE_OTHER);
+        ]);
     }
 
     #[Route('/view/{id}', name: 'series_show', methods: ['GET', 'POST'])]
@@ -387,6 +387,9 @@ class SeriesController extends AbstractController
         /** @var User */
         $user = $this->getUser();
         $series = $user->getSeries() != NULL ? $user->getSeries() : "Vous ne suivez aucune série.";
+
+        // On récupère les notes depuis un tableau de séries existant
+        $series = $seriesRepo->getSeries(null, null, $series);
 
         $series = $paginator->paginate(
             $series,

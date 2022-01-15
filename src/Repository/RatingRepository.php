@@ -49,10 +49,8 @@ class RatingRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->delete()
-            ->andWhere('r.series = :sid')
-            ->andWhere('r.user = :uid')
-            ->setParameter('sid', $rating->getSeries()->getId())
-            ->setParameter('uid', $rating->getUser()->getId())
+            ->andWhere('r.id = :id')
+            ->setParameter('id', $rating->getId())
             ->getQuery()
             ->getResult();
     }

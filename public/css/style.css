@@ -9,6 +9,11 @@ body {
 .red{
     color: var(--bs-red);
 }
+
+.white{
+    color: var(--bs-white);
+}
+
 .background-body {
     background-color: #222f3e;
 }

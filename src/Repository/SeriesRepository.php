@@ -20,7 +20,7 @@ class SeriesRepository extends ServiceEntityRepository
         parent::__construct($registry, Series::class);
     }
 
-    public function getSeries($sort = null, $search = null)
+    public function getSeries($sort = null, $search = null, $series = [])
     {
         $query = $this->createQueryBuilder('s')
             ->select('s, COALESCE(avg(r.value), 0), er')
@@ -33,12 +33,18 @@ class SeriesRepository extends ServiceEntityRepository
                 ->setParameter('search', '%' . htmlspecialchars($search) . '%');
             }
 
+            if(!empty($series)){
+                $query->andWhere('s.id IN (:series)');
+                $query->setParameter('series', $series); 
+            }
+            
             if($sort != null){
                 $query->orderBy('avg(r.value)', $sort == 'ASC' ? 'ASC' : 'DESC');
                 $query->addOrderBy('s.title', 'ASC');
             } else {
                 $query->orderBy('s.title', 'ASC');
             }
+
 
             $query->groupBy('s.id')
             ->getQuery()
@@ -48,18 +54,6 @@ class SeriesRepository extends ServiceEntityRepository
         return $query;
     }
 
-    public function associateRatings($series = []){
-        $query = $this->createQueryBuilder('r')
-            ->select('COALESCE(avg(r.value))')
-            ->from('Rating', 'r')
-            ->where('r.series IN (:series)')
-            ->setParameter('series', $series)
-            ->getQuery()
-            ->getResult();
-        dump($query); die;
-        return null;
-    }
-
     public function getRandomSeries($genre, $limit = 4){
         return $this->createQueryBuilder('s')
         ->select('s, r')
@@ -67,7 +61,7 @@ class SeriesRepository extends ServiceEntityRepository
         ->join('s.genre', 'g')
         ->where('g.name = :genre')
         ->setParameter('genre', $genre)
-        ->setFirstResult(2) // demander
+        ->setFirstResult(2)
         ->setMaxResults($limit)
         ->getQuery()
         ->getResult();

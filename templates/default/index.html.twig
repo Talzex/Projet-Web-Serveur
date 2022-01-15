@@ -4,14 +4,13 @@
 {% endblock %}
 
 {% block main %}
-    <h1 class="text-center text-white">Bienvenue sur notre site :)</h1>
+    <h1 class="text-center text-white">Bienvenue sur notre site</h1>
 	{% if app.user %}
 	<h3 class="text-center text-white">Que souhaitez-vous regarder aujourd'hui {{ app.user }} ?</h3>
 	{% endif %}
 	<div class="container">
 		<div class="row justify-content-center justify-content-md-evenly">
 			{% for genre, series in seriesList %}
-            <!-- Pour chaque "genre" -->
                 <h3 class="text-white">{{ genre }}</h3>
                 {% for serie in series %}
 				<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-auto py-3 text-center">
