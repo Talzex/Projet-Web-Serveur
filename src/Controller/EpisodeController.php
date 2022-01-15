@@ -14,38 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/episode')]
 class EpisodeController extends AbstractController
 {
-    #[Route('/', name: 'episode_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $episodes = $entityManager
-            ->getRepository(Episode::class)
-            ->findAll();
-
-        return $this->render('episode/index.html.twig', [
-            'episodes' => $episodes,
-        ]);
-    }
-
-    #[Route('/new', name: 'episode_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $episode = new Episode();
-        $form = $this->createForm(EpisodeType::class, $episode);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($episode);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('episode/new.html.twig', [
-            'episode' => $episode,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}', name: 'episode_show', methods: ['GET'])]
     public function show(Episode $episode): Response
     {
@@ -56,9 +24,11 @@ class EpisodeController extends AbstractController
         $serie = $season->getSeries();
 
         $isSerieWatched = false;
+        $isSeasonWatched = false;
         $isEpisodeWatched = false;
         if($user != NULL){
             $isSerieWatched = $serie->isFullyWatched($user);
+            $isSeasonWatched = $season->isFullyWatched($user);
             $isEpisodeWatched = $episode->isFullyWatched($user);
         }
 
@@ -67,6 +37,7 @@ class EpisodeController extends AbstractController
             'season' => $season,
             'episode' => $episode,
             'is_serie_watched' => $isSerieWatched,
+            'is_season_watched' => $isSeasonWatched,
             'is_episode_watched' => $isEpisodeWatched,
         ]);
     }

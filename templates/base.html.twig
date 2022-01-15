@@ -54,15 +54,18 @@
 						</li>
 						{% else %}
 						<li class="nav-item">
-							<a class="nav-link {% if route == "app_register" %}active{% endif %}" href="{{ path('app_register') }}">Inscription</a>
+							<a class="nav-link {% if route == "app_login" %}active{% endif %}" href="{{ path('app_login') }}">Connexion</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link {% if route == "app_login" %}active{% endif %}" href="{{ path('app_login') }}">Connexion</a>
+							<a class="nav-link {% if route == "app_register" %}active{% endif %}" href="{{ path('app_register') }}">Inscription</a>
 						</li>
 						{% endif %}
 						{% if is_granted('ROLE_ADMIN') %}
 						<li class="nav-item">
 							<a class="nav-link {% if route == "add_serie" %}active{% endif %}" href="{{ path('series_new') }}">Ajouter une série</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link {% if route == "manage" %}active{% endif %}" href="{{ path('user_index') }}">Gérer les utilisateurs</a>
 						</li>
 						{% endif %}
 					</ul>
@@ -96,10 +99,10 @@
 				</li>
 				{% else %}
 				<li class="nav-item">
-					<a class="nav-link px-2 text-muted" href="{{ path('app_register') }}">Inscription</a>
+					<a class="nav-link px-2 text-muted" href="{{ path('app_login') }}">Connexion</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link px-2 text-muted" href="{{ path('app_login') }}">Connexion</a>
+					<a class="nav-link px-2 text-muted" href="{{ path('app_register') }}">Inscription</a>
 				</li>
 				{% endif %}
 			</ul>

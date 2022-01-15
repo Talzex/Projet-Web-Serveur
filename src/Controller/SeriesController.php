@@ -224,22 +224,21 @@ class SeriesController extends AbstractController
     {
         /** @var User */
         $user = $this->getUser();
-        $rating = new Rating;
-        $submitText = "Envoyer";
+        
+        $reqRating = $ratingRepository->getRating($user, $serie);
+        $rating = $reqRating == NULL ? new Rating : $reqRating;
+        $submitText = 'Envoyer';
+
         $isSerieFullyWatched = false;
-        $seasonWatched = [];
+        $seasonsWatched = [];
         
         if ($user != NULL) {
-            if ($ratingRepository->isRated($user, $serie)) {
-                $rating = $ratingRepository->getRating($user, $serie);
-                $submitText = "Modifier";
-            }
-
+            $submitText = $reqRating != NULL ? 'Modifier' : 'Envoyer';
             // Série vue/non vue
             $isSerieFullyWatched = $serie->isFullyWatched($user);
             foreach($serie->getSeasons() as $s){
                 if($s->isFullyWatched($user)){
-                    array_push($seasonWatched, $s);
+                    array_push($seasonsWatched, $s);
                 }
             }
         }
@@ -247,15 +246,13 @@ class SeriesController extends AbstractController
         $ratingForm = $this->createForm(RatingType::class, $rating, [
             'label' => $submitText,
         ]);
-
         $ratingForm->handleRequest($request);
 
         if ($ratingForm->isSubmitted() && $ratingForm->isValid() && $user != NULL) {
-            $isRated = $ratingRepository->isRated($user, $serie);
             $date = new \DateTime();
             $date->format('Y-m-d H:i:s');
             $rating->setDate($date);
-            if (!$isRated) {
+            if ($reqRating == NULL) {
                 $rating->setSeries($serie);
                 $rating->setUser($user);
                 $serie->addRating($rating);
@@ -265,18 +262,17 @@ class SeriesController extends AbstractController
         }
 
         $histo = [];
-        for($i = 0; $i <= 10; $i++){
+        for($i = 0; $i <= 10; $i++)
             $histo[$i] = 0;
-        }
-        foreach($serie->getRatings() as $rating){
+
+        foreach($serie->getRatings() as $rating)
             $histo[$rating->getValue()]++;
-        }
 
         return $this->render('series/show.html.twig', [
             'series' => $serie,
             'ratingForm' => $ratingForm->createView(),
             'is_serie_watched' => $isSerieFullyWatched,
-            'seasons_watched' => $seasonWatched,
+            'seasons_watched' => $seasonsWatched,
             'histogramme' => $histo,
         ]);
     }

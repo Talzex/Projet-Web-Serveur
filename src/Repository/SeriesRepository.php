@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Series;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Series|null find($id, $lockMode = null, $lockVersion = null)
@@ -45,12 +44,10 @@ class SeriesRepository extends ServiceEntityRepository
                 $query->orderBy('s.title', 'ASC');
             }
 
-
             $query->groupBy('s.id')
             ->getQuery()
             ->getResult()
             ;
-
         return $query;
     }
 
