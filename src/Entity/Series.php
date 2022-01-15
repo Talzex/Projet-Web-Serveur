@@ -134,6 +134,7 @@ class Series
      * @var \Rating
      *
      * @ORM\OneToMany(targetEntity="Rating", mappedBy="series")
+     * @OrderBy({"date" = "DESC"})
      */
     private $ratings;
 

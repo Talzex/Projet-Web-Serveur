@@ -68,7 +68,30 @@
 				{{ form_end(ratingForm) }}
 				{% endif %}
 		</div>
-		
+
+<!--
+		<div class="position-relative bg-white d-flex justify-content-between ms-2 me-2">
+			{% for key, value in histogramme %}
+				{{ key }}
+				<div class="position-absolute bg-black bottom-0 left-{{ key * 10 + 5 * key }} top-{{ 100 - value * 10}} ">
+					<div class="w-100 h-100 bg-black">64ds654fsd</div>
+				</div>
+			{% endfor %}
+		</div> -->
+
+		<table class="charts-css bar show-heading show-labels show-primary-axis show-10-secondary-axes show-data-axes bg-white p-3 text-black">
+			<caption>Histogramme des notes</caption>
+			{% for key, value in histogramme %}
+				<tr>
+					<th scope="row">{{ key }}</th>
+					<td style="width:{{ value * 10}}%">
+						<div class="me-1">
+							{{ value }}
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
 
 		<div class="row my-5">
 			{% if series.ratings|length > 0 %}
@@ -82,7 +105,7 @@
 							<p class="m-1">{{ rating.comment }}</p>
 						</div>
 						<div class="border-top pt-2 bg-dark py-2 mt-auto">
-							<p class="m-0">
+							<p class="m-0 text-light">
 								{{ rating.date }}
 								{% if is_granted('ROLE_ADMIN') %}
 								<a href="{{ path('delete_rating', {'id': rating.id}) }}">
@@ -95,7 +118,7 @@
 					</div>
 				{% endfor %}
 			{% else %}
-			<h3 class="text-center text-white">Il n'y a pas de commentaire</h3>
+				<h3 class="text-center text-white">Il n'y a pas de commentaire</h3>
 			{% endif %}
 		</div>
 	</div>

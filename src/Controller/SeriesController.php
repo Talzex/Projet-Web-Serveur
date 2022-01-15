@@ -264,11 +264,20 @@ class SeriesController extends AbstractController
             $entityManager->flush();
         }
 
+        $histo = [];
+        for($i = 0; $i <= 10; $i++){
+            $histo[$i] = 0;
+        }
+        foreach($serie->getRatings() as $rating){
+            $histo[$rating->getValue()]++;
+        }
+
         return $this->render('series/show.html.twig', [
             'series' => $serie,
             'ratingForm' => $ratingForm->createView(),
             'is_serie_watched' => $isSerieFullyWatched,
-            'seasons_watched' => $seasonWatched
+            'seasons_watched' => $seasonWatched,
+            'histogramme' => $histo,
         ]);
     }
     #[Route('/view/{id}/trailer', name: 'series_trailer', methods: ['GET'])]
