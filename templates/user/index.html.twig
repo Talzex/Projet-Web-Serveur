@@ -3,43 +3,44 @@
 {% block title %}User index{% endblock %}
 
 {% block main %}
-    <h1>User index</h1>
+<div class="container">
+    <h1 class="text-white my-3">Gestion utilisateurs</h1>
 
-    <table class="table">
+    <table class="table table-dark">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>RegisterDate</th>
-                <th>Admin</th>
-                <th>UserId</th>
-                <th>actions</th>
+                <th class="table-dark">Id</th>
+                <th class="table-dark">Nom</th>
+                <th class="table-dark">Email</th>
+                <th class="table-dark">Mot de passe</th>
+                <th class="table-dark">Date d'inscription</th>
+                <th class="table-dark">Admin</th>
+                <th class="table-dark">Id utilisateurs</th>
+                <th class="table-dark">Action</th>
             </tr>
         </thead>
         <tbody>
-        {% for user in users %}
+            {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.registerDate ? user.registerDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ user.admin ? 'Yes' : 'No' }}</td>
-                <td>{{ user.userId }}</td>
-                <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                <td class="table-dark">{{ user.id }}</td>
+                <td class="table-dark">{{ user.name }}</td>
+                <td class="table-dark">{{ user.email }}</td>
+                <td class="table-dark">{{ user.password }}</td>
+                <td class="table-dark">{{ user.registerDate ? user.registerDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td class="table-dark">{{ user.admin ? 'Yes' : 'No' }}</td>
+                <td class="table-dark">{{ user.userId }}</td>
+                <td class="table-dark">
+                    <a class="text-white text-decoration-none link-series"
+                        href="{{ path('user_delete', {'id': user.id}) }}"><i class="bi bi-trash-fill"></i></a>
                 </td>
             </tr>
-        {% else %}
+            {% else %}
             <tr>
                 <td colspan="8">no records found</td>
             </tr>
-        {% endfor %}
+            {% endfor %}
         </tbody>
     </table>
+</div>
 
-    <a href="{{ path('user_new') }}">Create new</a>
 {% endblock %}
