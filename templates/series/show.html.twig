@@ -69,17 +69,7 @@
 				{% endif %}
 		</div>
 
-<!--
-		<div class="position-relative bg-white d-flex justify-content-between ms-2 me-2">
-			{% for key, value in histogramme %}
-				{{ key }}
-				<div class="position-absolute bg-black bottom-0 left-{{ key * 10 + 5 * key }} top-{{ 100 - value * 10}} ">
-					<div class="w-100 h-100 bg-black">64ds654fsd</div>
-				</div>
-			{% endfor %}
-		</div> -->
-
-		<table class="charts-css bar show-heading show-labels show-primary-axis show-data-axes bg-white p-3 text-black">
+		<table class="charts-css bar show-heading show-labels show-primary-axis show-data-axes bg-white p-3 text-black w-50">
 			<caption>Histogramme des notes</caption>
 			{% if series.ratings|length == 0 %}
 				{% set ratio = 1 %}
