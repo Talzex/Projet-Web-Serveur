@@ -3,13 +3,21 @@
 {% block title %}New Series{% endblock %}
 
 {% block main %}
-    <h1>Enregistrer une série dans la base de données</h1>
-
-    <form method="GET" action="{{ path('series_add') }}">
-        <input type="text" name="imdb">
-        <input type="submit" value="Enregistrer">
-    </form>
-
+   
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <h1 class="text-white d-inline-block">Ajouter une série à la base de données</h1>
+            <form method="GET" action="{{ path('series_add') }}" class="w-25">
+                <div class="mb-3">
+                    <label for="InputIMDB" class="form-label text-white text-left">Code IMDB</label>
+                    <input type="text" class="form-control"  id="InputIMDB" name="imdb" required>
+                </div>
+                
+                <button type="button" class="btn btn-primary">Ajouter Série</button>
+            </form>
+        
+        </div>
+    </div>
     {% if error != NULL %}
         {{ error }}
     {% endif %}

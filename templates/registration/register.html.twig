@@ -2,80 +2,23 @@
 
 {% block title %}Register
 {% endblock %}
-
 {% block main %}
 	<div class="container text-white text-center">
-		<h1>Inscription</h1>
-		<div class="row">
+		<div class="row justify-content-center">
+			<h1>Inscription</h1>
 			{{ form_start(registrationForm,{
-                'attr' : {'class': 'd-flex flex-column ms-auto me-auto col-lg-4 col-md-5'}
+                'attr' : {'class': 'w-25'}
             }) }}
-		<div class="d-inline-flex flex-column text-start my-2">
-			{{ form_label(registrationForm.name, 'Nom',{
-                'label_attr' : {'class': 'form-label'}
-            }) }}
-			{{ form_widget(registrationForm.name,{
-                'attr' : {'class': 'form-control'}
-            }) }}
-
-			<small>{{ form_help(registrationForm.name) }}</small>
-
-			<div class="form-error">
-				{{ form_errors(registrationForm.name) }}
-			</div>
+			{{ form_row(registrationForm.name) }}
+			{{ form_row(registrationForm.email) }}
+			{{ form_row(registrationForm.plainPassword, {
+				label: 'Mot de passe'
+			}) }}
+			{{ form_row(registrationForm.country) }}
+			{{ form_row(registrationForm.agreeTerms) }}
+			{{ form_row(registrationForm.captcha) }}
 		</div>
-		<div class="d-inline-flex flex-column text-start my-2">
-			{{ form_label(registrationForm.email, 'Email',{
-                'label_attr' : {'class': 'form-label'}
-            }) }}
-			{{ form_widget(registrationForm.email,{
-                'attr' : {'class': 'form-control'}
-            }) }}
-
-
-			<small>{{ form_help(registrationForm.email) }}</small>
-
-			<div class="form-error">
-				{{ form_errors(registrationForm.email) }}
-			</div>
-		</div>
-		<div class="d-inline-flex flex-column text-start my-2">
-			{{ form_label(registrationForm.plainPassword, 'Mot de passe',{
-                'label_attr' : {'class': 'form-label'}
-            }) }}
-			{{ form_widget(registrationForm.plainPassword,{
-                'attr' : {'class': 'form-control'}
-            }) }}
-
-			<small>{{ form_help(registrationForm.plainPassword) }}</small>
-
-			<div class="form-error">
-				{{ form_errors(registrationForm.plainPassword) }}
-			</div>
-		</div>
-		<div class="text-start my-2">
-			{{ form_label(registrationForm.country, 'Pays',{
-                'label_attr' : {'class': 'form-label'}
-            }) }}
-			{{ form_widget(registrationForm.country,{
-                'attr' : {'class': 'form-select'}
-            }) }}
-
-			<small>{{ form_help(registrationForm.country) }}</small>
-
-			<div class="form-error">
-				{{ form_errors(registrationForm.country) }}
-			</div>
-		</div>
-		{{ form_row(registrationForm.agreeTerms) }}
-
-		{{ form_row(registrationForm.captcha) }}
-
-		<button type="submit" class="btn btn-outline-light my-2">Inscription</button>
+		<button type="submit" class="btn btn-primary mb-3">Je m'inscris</button>
 		{{ form_end(registrationForm) }}
-
-		</div>
-		
 	</div>
-
 {% endblock %}
