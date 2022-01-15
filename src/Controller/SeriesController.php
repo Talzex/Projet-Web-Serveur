@@ -347,25 +347,6 @@ class SeriesController extends AbstractController
         return new Response(stream_get_contents($poster, -1, 0), 200, $headers);
     }
 
-    #[Route('/view/{serie}/{season}', name: 'show_season', methods: ['GET'])]
-    public function showSeason(Series $serie, Season $season): Response
-    {
-        return $this->renderForm('series/season.html.twig', [
-            'serie' => $serie,
-            'season' => $season,
-        ]);
-    }
-
-    #[Route('/view/{serie}/{season}/{episode}', name: 'show_episode', methods: ['GET'])]
-    public function showEpisode(Series $serie, Season $season, Episode $episode): Response
-    {
-        return $this->renderForm('series/episode.html.twig', [
-            'serie' => $serie,
-            'season' => $season,
-            'episode' => $episode,
-        ]);
-    }
-
     #[Route('/follow/{id}', name: 'follow_serie', methods: ['GET'])]
     public function followSerie(Series $serie, EntityManagerInterface $manager): Response
     {
