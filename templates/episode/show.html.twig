@@ -11,7 +11,8 @@
 				{{ episode.number }}
 				:
 				{{episode.title}}
-				({{ episode.date }} - <a class="text-white text-decoration-none link-series" href="{{ path('season_show', {'id': episode.season.id}) }}">Saison {{episode.season.number}}</a>)</h2>
+				({{ episode.date }} - <a class="text-white text-decoration-none link-series" href="{{ path('season_show', {'id': episode.season.id}) }}">Saison {{episode.season.number}}</a>)
+			</h2>
 			<a class="w-auto" href="{{ path("watch_episode", {"id": episode.id}) }}">
 				{% if app.user %}
 					{% if is_episode_watched == true %}
@@ -34,9 +35,9 @@
 						{{ episode.imdbrating }}/10</p>
 				</a>
 				<div class="ratio ratio-16x9">
-					{% if serie.youtubeTrailer != NULL %}
-						{% set ytLink = serie.youtubeTrailer | split('v=') %}
-						<iframe src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ serie.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					{% if episode.season.series.youtubeTrailer != NULL %}
+						{% set ytLink = episode.season.series.youtubeTrailer | split('v=') %}
+						<iframe src="https://www.youtube.com/embed/{{ ytLink[1] }}" title="{{ episode.season.series.title }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 					{% else %}
 						<p>Pas de trailer trouvé</p>
 					{% endif %}

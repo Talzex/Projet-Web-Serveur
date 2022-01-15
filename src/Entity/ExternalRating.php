@@ -36,7 +36,7 @@ class ExternalRating
     private $votes;
 
     /**
-     * @var \Series
+     * @var \Series|null
      *
      * @ORM\ManyToOne(targetEntity="Series", inversedBy="externalRating")
      * @ORM\JoinColumns({
@@ -46,7 +46,7 @@ class ExternalRating
     private $series;
 
     /**
-     * @var \ExternalRatingSource
+     * @var \ExternalRatingSource|null
      *
      * @ORM\ManyToOne(targetEntity="ExternalRatingSource")
      * @ORM\JoinColumns({

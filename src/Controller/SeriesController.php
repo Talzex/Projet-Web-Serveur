@@ -2,34 +2,24 @@
 
 namespace App\Controller;
 
-use App\Entity\ExternalRatingSource;
+use App\Entity\Series;
+use App\Entity\User;
 use App\Entity\Genre;
 use App\Entity\Actor;
-use App\Entity\ExternalRating;
 use App\Entity\Season;
-use App\Entity\Series;
 use App\Entity\Rating;
-use App\Entity\User;
+use App\Entity\ExternalRating;
+use App\Entity\ExternalRatingSource;
 use App\Entity\Episode;
 use App\Form\SeriesType;
 use App\Form\RatingType;
 use App\Repository\RatingRepository;
 use App\Repository\SeriesRepository;
-use Container5pYjq0X\PaginatorInterface_82dac15;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/series')]
@@ -46,9 +36,9 @@ class SeriesController extends AbstractController
 
         $numPage = $request->query->get('page') != NULL ? $request->query->get('page') : 1;
         $series = $paginator->paginate(
-            $series, // Requête contenant les données à paginer (ici nos articles)
-            $numPage, // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
-            24 // Nombre de résultats par page
+            $series,
+            $numPage,
+            24
         );
         
         return $this->render('series/index.html.twig', [
@@ -58,13 +48,14 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/new', name: 'series_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(): Response
     {
         return $this->renderForm('series/new.html.twig', [
             'error' => NULL,
         ]);
 
     }
+
     #[Route('/add', name: 'series_add', methods: ['GET', 'POST'])]
     public function add(Request $request, EntityManagerInterface $em): Response
     {
@@ -81,8 +72,6 @@ class SeriesController extends AbstractController
         
         $response = file_get_contents($url);
         $data = json_decode($response, true);
-        
-        //dump($data); die;
 
         $serieExist = $em->getRepository(Series::class)->findOneBy(['imdb' => $imdb]);
 
@@ -394,9 +383,9 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/deleteRating/{id}', name: 'delete_rating', methods: ['GET'])]
-    public function deleteRating(Rating $rating, RatingRepository $rr, EntityManagerInterface $entityManager): Response
+    public function deleteRating(Rating $rating, RatingRepository $ratingRepo): Response
     {
-        $rr->deleteRating($rating);
+        $ratingRepo->deleteRating($rating);
         return $this->redirectToRoute('series_show', ['id' => $rating->getSeries()->getId()]);
     }
 }

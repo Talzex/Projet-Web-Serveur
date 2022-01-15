@@ -2,20 +2,20 @@
 {% block title %}Series
 {% endblock %}
 {% block main %}
-	<h1 class="text-white text-center">Listes des séries{% if route == "user_series" %} que vous suivez{% endif %}</h1>
+	<h1 class="text-white text-center  mb-5">Listes des séries{% if route == "user_series" %} que vous suivez{% endif %}</h1>
 	{% if app.user %}
 		{% if app.request.attributes.get('_route') != "user_series" %}
 			<div class="text-center text-white">
 				<a class="btn btn-outline-light" href="{{ path('series_index') }}"><i class="bi bi-x-circle"></i></a>
 				{% if order == 'ASC' %}
 					<a class="btn btn-outline-light" href="{{ path('series_index', {'s': 'DESC'}) }}"><i class="bi bi-sort-numeric-up"></i></a>
-					<p>Les moins bien notées en premières.</p>
+					<p class="mt-3">Les moins bien notées en premières.</p>
 				{% elseif order == 'DESC' %}
 					<a class="btn btn-outline-light" href="{{ path('series_index', {'s': 'ASC'}) }}"><i class="bi bi-sort-numeric-down "></i></a>
-					<p>Les mieux notées en premières</p>
+					<p class="mt-3">Les mieux notées en premières</p>
 				{% else %}
 					<a class="btn btn-outline-light" href="{{ path('series_index', {'s': 'DESC'})}}"><i class="bi bi-sort-numeric-up "></i></a>
-					<p>Séries triées par titre</p>
+					<p class="mt-3">Séries triées par titre</p>
 				{% endif %}
 			</div>
 		{% endif %}

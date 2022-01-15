@@ -5,8 +5,6 @@ namespace App\Command;
 use App\Entity\Rating;
 use App\Entity\User;
 use App\Entity\Series;
-use App\Repository\SeriesRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +13,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class UserCommand extends Command
 {
-    // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:generate-ratings';
 
     private $entityManager;
@@ -29,7 +26,7 @@ class UserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Command to generate ratings on each page')
+            ->setDescription('Command to generate random ratings on each page')
             ->addArgument('ratingNumber', InputArgument::REQUIRED, 'Number of ratings per page')
             ->setHelp('This command allows you to generate ratings on each series.');
     }
@@ -39,8 +36,11 @@ class UserCommand extends Command
         $ratingNumber = $input->getArgument('ratingNumber') == NULL ? 10 : $input->getArgument('ratingNumber');
 
         $output->writeln([
+            '',
             'Generating ' . $ratingNumber . ' random ratings on each series...',
-            '====================='
+            '.',
+            '.',
+            '.',
         ]);
 
         $em = $this->entityManager;
@@ -118,6 +118,10 @@ class UserCommand extends Command
                 $em->flush();
             }
         }
+
+        $output->writeln([
+            'Success! All ratings have been generated.'
+        ]);
 
         return Command::SUCCESS;
     }

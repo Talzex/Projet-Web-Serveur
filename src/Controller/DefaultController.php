@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Genre;
 use App\Repository\SeriesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,8 +52,6 @@ class DefaultController extends AbstractController
     #[Route('/apropos', name: 'apropos')]
     public function apropos() : Response
     {
-        return $this->render('default/apropos.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);
+        return $this->render('default/apropos.html.twig');
     }
 }
