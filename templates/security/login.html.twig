@@ -7,10 +7,6 @@
 	<div class="container text-white text-center">
 		<div class="row">
 			<form method="post" class="col-lg-5 col-md-6 ms-auto me-auto">
-				{% if error %}
-					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
-
 				{% if app.user %}
 					<div class="mb-3">
 						Vous êtes connecté en tant que
@@ -32,6 +28,9 @@
 				type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 				<button class="btn btn-primary my-2" type="submit">Se connecter</button>
 			</form>
+			{% if error %}
+				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
 		</div>
 	</div>
 

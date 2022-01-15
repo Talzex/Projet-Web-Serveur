@@ -81,10 +81,15 @@
 
 		<table class="charts-css bar show-heading show-labels show-primary-axis show-data-axes bg-white p-3 text-black">
 			<caption>Histogramme des notes</caption>
+			{% if series.ratings|length == 0 %}
+				{% set ratio = 1 %}
+			{% else %}
+				{% set ratio = series.ratings|length %}
+			{% endif %}
 			{% for key, value in histogramme %}
 				<tr>
 					<th scope="row">{{ key }}</th>
-					<td style="width:{{ value * 100 / series.ratings|length }}%">
+					<td style="width:{{ value * 100 / ratio }}%">
 						<div class="me-1">
 							{{ value }}
 						</div>

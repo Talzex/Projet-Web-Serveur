@@ -64,6 +64,7 @@ class EpisodeController extends AbstractController
 
         return $this->render('episode/show.html.twig', [
             'serie' => $serie,
+            'season' => $season,
             'episode' => $episode,
             'is_serie_watched' => $isSerieWatched,
             'is_episode_watched' => $isEpisodeWatched,
