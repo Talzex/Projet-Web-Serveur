@@ -23,7 +23,7 @@ class DefaultController extends AbstractController
         $genreIds = [];
 
         $i = 0;
-        while($i <= $genreLimit){
+        while($i < $genreLimit){
             $randomNumber = rand(1 , $genreCount);
             if(!in_array($randomNumber, $genreIds)){
                 $genreIds[$i] = rand(1 , $randomNumber);
@@ -32,16 +32,17 @@ class DefaultController extends AbstractController
         }
         
         $qb = $em->createQueryBuilder();
-        $genres = $qb->select('g.name')
+        $genres = $qb->select('g')
         ->from('App\Entity\Genre','g')
         ->where('g.id IN (:genreIds)')
         ->setParameter('genreIds', $genreIds)
         ->getQuery()
         ->getResult();
         
+        
         $series = [];
         foreach($genres as $genre){
-            $series[$genre['name']] = $sr->getRandomSeries($genre['name']);
+            $series[$genre->getName()] = $sr->getRandomSeries($genre->getId());
         }
         
         return $this->render('default/index.html.twig', [

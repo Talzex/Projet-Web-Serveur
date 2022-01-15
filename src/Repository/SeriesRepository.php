@@ -59,9 +59,8 @@ class SeriesRepository extends ServiceEntityRepository
         ->select('s, r')
         ->join('s.externalRating', 'r')
         ->join('s.genre', 'g')
-        ->where('g.name = :genre')
+        ->where('g.id = :genre')
         ->setParameter('genre', $genre)
-        ->setFirstResult(2)
         ->setMaxResults($limit)
         ->getQuery()
         ->getResult();
