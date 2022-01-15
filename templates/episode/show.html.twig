@@ -11,7 +11,7 @@
 				{{ episode.number }}
 				:
 				{{episode.title}}
-				({{ episode.date }})</h2>
+				({{ episode.date }} - <a class="text-white text-decoration-none link-series" href="{{ path('season_show', {'id': episode.season.id}) }}">Saison {{episode.season.number}}</a>)</h2>
 			<a class="w-auto" href="{{ path("watch_episode", {"id": episode.id}) }}">
 				{% if app.user %}
 					{% if is_episode_watched == true %}
