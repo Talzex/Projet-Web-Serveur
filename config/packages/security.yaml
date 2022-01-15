@@ -1,4 +1,5 @@
 security:
+    access_denied_url: /
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
@@ -40,4 +41,5 @@ security:
         - { path: ^/season/watch, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/episode/watch, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/user, roles: ROLE_ADMIN }
+        - { path: ^/series/new, roles: ROLE_ADMIN }
         - { path: ^/series/admin, roles: ROLE_ADMIN }

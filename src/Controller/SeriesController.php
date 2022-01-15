@@ -116,17 +116,6 @@ class SeriesController extends AbstractController
                         ->setPoster($poster);
                     $em->persist($serie);
                     $em->flush();
-
-                    /*
-                    if(isset($data['totalSeasons'])){
-                        for($i = 1; $i <= intval($data['totalSeasons']); $i++){
-                            $s = new Season;
-                            $s->setNumber($i)
-                                ->setSeries($serie);
-                            $em->persist($s);
-                            $em->flush();
-                        }
-                    }*/
                         
                     foreach($ratings as $rating){
                         $r = new ExternalRating;
@@ -254,6 +243,7 @@ class SeriesController extends AbstractController
                 }
             }
         }
+        
         $ratingForm = $this->createForm(RatingType::class, $rating, [
             'label' => $submitText,
         ]);
