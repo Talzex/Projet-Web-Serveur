@@ -38,9 +38,6 @@ class UserCommand extends Command
         $output->writeln([
             '',
             'Generating ' . $ratingNumber . ' random ratings on each series...',
-            '.',
-            '.',
-            '.',
         ]);
 
         $em = $this->entityManager;
@@ -65,9 +62,10 @@ class UserCommand extends Command
         }
         
         $series = $seriesRepo->findAll();
+        $countSeries = count($series);
+        $num = 0;
 
         foreach($series as $serie) {
-
             for($i = 0; $i < $ratingNumber; $i++){
                 $mark = rand(0, 10);
                 switch ($mark) {
@@ -116,7 +114,12 @@ class UserCommand extends Command
 
                 $em->persist($r);
                 $em->flush();
+
             }
+            $num++;
+            $output->writeln([
+                $num . '/' . $countSeries,
+            ]);
         }
 
         $output->writeln([
