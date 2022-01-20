@@ -214,7 +214,10 @@ class SeriesController extends AbstractController
         /** @var User */
         $user = $this->getUser();
         
-        $reqRating = $ratingRepository->getRating($user, $serie);
+        $reqRating = NULL;
+        if($user != NULL){
+            $reqRating = $ratingRepository->getRating($user, $serie);
+        }
         $rating = $reqRating == NULL ? new Rating : $reqRating;
         $submitText = 'Envoyer';
 
