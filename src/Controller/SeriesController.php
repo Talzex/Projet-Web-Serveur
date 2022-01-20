@@ -159,7 +159,7 @@ class SeriesController extends AbstractController
                     ->setImdbrating(floatval($data['imdbRating']))
                     ->setNumber(intval($data['Episode']));
 
-                    $serie = $em->getRepository(Series::class)->findOneBy(['imdb' => 't' . $data['seriesID']]);
+                    $serie = $em->getRepository(Series::class)->findOneBy(['imdb' => $data['seriesID']]);
                     $season = $em->getRepository(Season::class)->findOneBy(['number' => $data['Season'], 'series' => $serie]);
 
                     if($season == NULL){
